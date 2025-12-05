@@ -3,6 +3,5 @@ public abstract class Case{
     public Case(int ligne, int colonne){
         this.ligne=ligne;this.colonne=colonne;
     }
-
     public abstract boolean estLibre();
 }

@@ -1,3 +1,3 @@
-public class Void {
-    public Void(){};
+public class Void extends Entite {
+    public Void(){super(0);};
 }
