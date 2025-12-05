@@ -4,6 +4,11 @@ public class CaseIntraversable extends Case {
 
     // le constructeur
     public CaseIntraversable(int ligne, int colonne) {
-        super(ligne, colonne, new Void());
+        super(ligne, colonne);
+    }
+
+    // la méthode estLibre
+    public boolean estLibre() {
+        return false;
     }
 }
