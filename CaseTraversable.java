@@ -13,6 +13,8 @@ public class CaseTraversable extends Case {
     public boolean estLibre(){
         return this.contenu instanceof Void;    
     }
+
+    // la méthode getContenu
     public Entite getContenu(){
         return this.contenu;
     }
