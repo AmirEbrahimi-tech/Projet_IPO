@@ -1,3 +1,9 @@
+// la classe Void
 public class Void extends Entite {
-    public Void(){super(0);};
+    // les attributs
+
+    // la contructeur par défaut
+    public Void() {
+        super(0);
+    }
 }
