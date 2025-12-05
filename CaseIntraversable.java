@@ -6,7 +6,9 @@ public class CaseIntraversable extends Case {
     public CaseIntraversable(int ligne, int colonne) {
         super(ligne, colonne);
     }
-    public boolean estLibre(){
+
+    // la méthode estLibre
+    public boolean estLibre() {
         return false;
     }
 }
