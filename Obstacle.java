@@ -1,0 +1,9 @@
+// la classe Obstacle
+public class Obstacle extends Entite {
+    // les attributs
+
+    // le constructeur par défaut
+    public Obstacle() {
+        super(3);
+    }
+}

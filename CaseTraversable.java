@@ -18,9 +18,13 @@ public class CaseTraversable extends Case {
     public Entite getContenu(){
         return this.contenu;
     }
+
+    // la méthode vide
     public void vide(){
         this.contenu = new Void();
     }
+
+    // la méthod entre
     public void entre(Entite e){
         this.contenu = e;
     }
