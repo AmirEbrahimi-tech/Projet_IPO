@@ -4,6 +4,6 @@ public class Void extends Entite {
 
     // la contructeur par défaut
     public Void() {
-        super(0);
+        super(1);
     }
 }
