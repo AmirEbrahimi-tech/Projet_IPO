@@ -4,12 +4,13 @@ public class CaseTraversable extends Case {
     protected Entite contenu;
 
     // le constructeur
-    public CaseTraversable(int ligne, int colonne, Entite e){
+    public CaseTraversable(int ligne, int colonne, Entite e) {
         super(ligne,colonne);
         this.contenu = e;
     }
 
     // la méthode estLibre
+    @Override
     public boolean estLibre(){
         return this.contenu instanceof Void;    
     }
