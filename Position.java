@@ -1,11 +1,12 @@
 // la classe Position
 public class Position {
     // les attributs
-    protected double x, y;
+    protected double x, y, borneX, borneY;
 
     // le constructeur
-    public Position(double x, double y) {
+    public Position(double x, double y, double bX, double bY) {
         this.x = x; this.y = y;
+        this.borneX = bY; this.borneY = bY;
     }
 
     // la méthode x
@@ -20,16 +21,8 @@ public class Position {
 
     // la méthode set(x, y)
     protected void set(double x, double y) {
-        this.x = x; this.y = y;
-    }
-
-    // la méthode setX(x, _)
-    protected void setX(double x) {
-        set(x, this.y);
-    }
-
-    // la méthode setY(_, y)
-    protected void setY(double y) {
-        set(this.x, y);
+        if ( (x > 0 && x < this.borneX) && (y > 0 && y < this.borneY)) {
+            this.x = x; this.y = y;
+        }
     }
 }
