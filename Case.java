@@ -1,7 +1,7 @@
 // la classe abstrait Case
 public abstract class Case{
     // les attributs
-    private final int ligne,colonne;
+    protected final int ligne,colonne;
 
     // le constructeur
     public Case(int ligne, int colonne){
