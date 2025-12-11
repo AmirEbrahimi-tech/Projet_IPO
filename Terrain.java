@@ -1,6 +1,8 @@
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
+
 
 public class Terrain {
 
@@ -52,6 +54,7 @@ public class Terrain {
                         case 'M': case '3': case 'W': case 'E':
                             cc = new CaseTraversable(l, c, new Monstre(5, Direction.ofChar(ch)));
                             break;
+                        case 'X': cc = new CaseTraversable(l, c, new Personnage(5, Direction.nord));break;
                         default:  cc = null; break;
                     }
                     carte[l][c] = cc;

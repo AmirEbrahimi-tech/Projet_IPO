@@ -1,5 +1,5 @@
 // la classe abstrait Case
-public abstract class Case{
+public abstract class Case extends Carre {
     // les attributs
     protected final int ligne,colonne;
 
@@ -8,5 +8,20 @@ public abstract class Case{
         this.ligne = ligne;
         this.colonne = colonne;
     }
-    public abstract boolean estLibre();
+    //Méthodes
+    @Override
+    public void enter(Bille b){
+        
+    }
+
+    @Override
+    public void leave(Bille b){
+
+    }
+
+    @Override
+    public void touche(Bille b){
+
+    }
+    public abstract boolean estVide();
 }

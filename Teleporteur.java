@@ -11,14 +11,18 @@ public class Teleporteur extends CaseTraversable{
         return this.sortie;
     }
     public void deplace(){
+        this.sortie.desactivation();
         this.sortie.entre(this.getContenu());
         this.vide();
     }
     public boolean estActive(){
         return this.active;
     }
-    public void inverseActivation(){
-        this.active = !this.active;
+    public void activation(){
+        this.active = true;
+    }
+    public void desactivation(){
+        this.active = false;
     }
 
 }

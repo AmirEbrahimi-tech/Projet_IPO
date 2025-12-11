@@ -23,7 +23,7 @@ public class FenetreJeu extends JPanel {
     }
 
     // la méthode pour dessinner les loups
-    public void afficheLoop(Graphics g, Case c) {
+    public void afficheLoup(Graphics g, Case c) {
         Entite ent = ((CaseTraversable) c).getContenu();
         if (!(ent instanceof Monstre)) return;
         g.setColor(Color.RED);
@@ -67,18 +67,18 @@ public class FenetreJeu extends JPanel {
     // la méthode pour dessinner les murs
     public void afficheMurs(Graphics g, Case c) {
         g.setColor(Color.BLACK);
-        g.fillOval(c.colonne*tailleCase, c.ligne*tailleCase, tailleCase, tailleCase);
+        g.fillRect(c.colonne*tailleCase, c.ligne*tailleCase, tailleCase, tailleCase);
     }
 
     // la méthode pour dessinner la sortie
     public void afficheSortie(Graphics g, Case c) {
         g.setColor(Color.BLUE);
-        g.fillOval(c.colonne*tailleCase - 2, c.ligne*tailleCase - 2, tailleCase+4, tailleCase+4);
+        g.fillOval(c.colonne*tailleCase - 1, c.ligne*tailleCase - 1, tailleCase+2, tailleCase+2);
     }
 
     public void afficheTeleporteur(Graphics g, Case c){
         g.setColor(new Color(255,0,255));
-        g.fillOval(c.colonne*tailleCase, c.ligne*tailleCase, tailleCase, tailleCase);
+        g.fillOval(c.colonne*tailleCase - 1, c.ligne*tailleCase - 1, tailleCase+2, tailleCase+2);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class FenetreJeu extends JPanel {
                     else if (c instanceof Teleporteur) afficheTeleporteur(g, c);
                     else if (c instanceof CaseTraversable caseTraversable) {
                         Entite contenu = caseTraversable.getContenu();
-                        if (contenu instanceof Monstre) afficheLoop(g, c);
+                        if (contenu instanceof Monstre) afficheLoup(g, c);
                         else if (contenu instanceof Personnage) afficheMouton(g, c);
                         else if (contenu instanceof Obstacle) afficheObs(g, c);
                     }
