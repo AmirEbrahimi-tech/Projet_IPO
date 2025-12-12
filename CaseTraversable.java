@@ -11,7 +11,7 @@ public class CaseTraversable extends Case {
 
     // la méthode estLibre
     @Override
-    public boolean estLibre(){
+    public boolean estVide(){
         return this.contenu instanceof Void;    
     }
 

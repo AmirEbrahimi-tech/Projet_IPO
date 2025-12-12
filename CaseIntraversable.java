@@ -8,7 +8,7 @@ public class CaseIntraversable extends Case {
     }
 
     // la méthode estLibre
-    public boolean estLibre() {
+    public boolean estVide() {
         return false;
     }
 }
