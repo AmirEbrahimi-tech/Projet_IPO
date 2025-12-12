@@ -70,7 +70,7 @@ public class Bille extends JPanel implements MouseMotionListener {
     @Override
     public void mouseMoved(java.awt.event.MouseEvent e) {
         Position courant = mousePosition(e);
-        System.out.println("Current: " + courant.getX() + " , " + courant.getY());
+        System.out.println("Courant: " + courant.getX() + " , " + courant.getY());
 
         if (positionPrec != null) {
             double dx = courant.getX() - positionPrec.getX();
