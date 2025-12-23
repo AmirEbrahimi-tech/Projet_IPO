@@ -1,5 +1,4 @@
 import java.awt.event.KeyEvent;
-import javax.swing.Timer;
 
 public class Donjon {
     public void keyTyped(KeyEvent e, Jeu j){
@@ -9,11 +8,23 @@ public class Donjon {
         int tempo = 100;
         Jeu jeu = new Jeu("labyBille.txt");
         FenetreJeu graphic = new FenetreJeu(jeu.terrain);
-        Timer timer = new Timer(tempo, en -> {
+        // Timer timer = new Timer(tempo, en -> {
+        //     graphic.bille.deplacer();
+        //     graphic.repaint();
+        //     jeu.debug();
+        //     // if (jeu.partieFinie()) { graphic.ecranFinal(jeu.sortis);}
+        // });
+        // timer.setInitialDelay(0);
+        // timer.start();
+        try {
+            while (true) {
+            // graphic.bille.deplacer();
             graphic.repaint();
-            // if (jeu.partieFinie()) { graphic.ecranFinal(jeu.sortis);}
-        });
-        timer.setInitialDelay(0);
-        timer.start();
+            jeu.debug();
+            Thread.sleep(10);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

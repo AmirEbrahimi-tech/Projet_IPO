@@ -1,6 +1,5 @@
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JFrame;
@@ -9,10 +8,10 @@ import javax.swing.JPanel;
 // la class Bille
 public class Bille extends JPanel implements MouseMotionListener {
     // les attributs
-    private Position pos;
-    private Position positionPrec;
-    private Vitesse vit;
-    private final int rayon = 20;
+    protected Position pos;
+    protected Position positionPrec;
+    protected Vitesse vit;
+    protected final int rayon = 20;
     // à voir ...
 
     // le constructeur ar défaut
@@ -48,7 +47,8 @@ public class Bille extends JPanel implements MouseMotionListener {
 
     // la méthode deplacer
     public void deplacer() {
-        // System.out.println(pos.getX() + " , " + pos.getY());
+
+        // System.out.println(pos.x + " , " + pos.y);
         if (estDedans(400, 400)) pos.set(pos.x + vit.x,pos.y + vit.y); // 400 est temporaire!!!!! il faut ajouter une variable static au class fenetreJeu qui contient la taille du fenetre et les utiliser ici
         frottement();
         repaint();
@@ -66,7 +66,6 @@ public class Bille extends JPanel implements MouseMotionListener {
         super.paintComponent(g);
         g.setColor(new Color(255, 0, 0, 127));
         g.fillOval((int) pos.x - rayon, (int) pos.y - rayon, rayon*2, rayon*2);
-    
     }
 
     // Invoked when a mouse button is pressed on a component and then dragged.
@@ -100,15 +99,20 @@ public class Bille extends JPanel implements MouseMotionListener {
     public static void main(String[] args) {
             JFrame frame = new JFrame("Fenetre");
             Bille test = new Bille(new Position(200, 200), new Vitesse(0, 0));
-            test.setPreferredSize(new Dimension(400, 400));
-            test.setBackground(new Color(200, 200, 200));
-            frame.getContentPane().add(test);
+            Jeu jeu = new Jeu("labyBille.txt");
+            FenetreJeu graphic = new FenetreJeu(jeu.terrain);
+            // test.setPreferredSize(new Dimension(400, 400));
+            // test.setBackground(new Color(200, 200, 200));
+            graphic.add(test);
+            frame.getContentPane().add(graphic);
+            // frame.getContentPane().add(test);
             frame.pack();
             frame.setVisible(true);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             try {
                 while (true) {
                 test.deplacer();
+                test.repaint();
                 Thread.sleep(10);
                 }
             } catch (Exception e) {

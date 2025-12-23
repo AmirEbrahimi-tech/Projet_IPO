@@ -6,6 +6,7 @@ public class FenetreJeu extends JPanel {
     private int tailleCase = 24;
     private int hauteur, largeur;
     private JFrame frame;
+    // protected Bille bille;
 
     public FenetreJeu(Terrain t) {
         this.hauteur = t.getHauteur();
@@ -17,6 +18,7 @@ public class FenetreJeu extends JPanel {
 
         this.frame = new JFrame("Donjon");
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // this.bille = new Bille(new Position(hauteur*tailleCase/2, largeur*tailleCase/2), new Vitesse());
         this.frame.getContentPane().add(this);
         this.frame.pack();
         this.frame.setVisible(true);
@@ -84,6 +86,7 @@ public class FenetreJeu extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        
         /* À compléter */
         for (Case[] ligne : this.terrain.carte) {
             for (Case c : ligne) {
@@ -100,6 +103,8 @@ public class FenetreJeu extends JPanel {
                 } catch (Exception e) {}
             }
         }
+        // g.setColor(new Color(255, 0, 0, 127));
+        // g.fillOval((int) bille.pos.x - bille.rayon, (int) bille.pos.y - bille.rayon, bille.rayon*2, bille.rayon*2);
     }
 
     public void ecranFinal(int n) {
@@ -111,4 +116,15 @@ public class FenetreJeu extends JPanel {
         frame.getContentPane().add(label);
         frame.repaint();
     }
+
+    // @Override
+    // public void mouseDragged(MouseEvent e) {
+    //     System.out.println("ok!?");
+    // }
+
+    // @Override
+    // public void mouseMoved(MouseEvent e) {
+    //     System.out.println("huh?");
+    //     this.bille.mouseMoved(e);
+    // }
 }
