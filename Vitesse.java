@@ -13,29 +13,9 @@ public class Vitesse {
         this.x = 0.0; this.y = 0.0;
     }
 
-    // la méthode getVitesseH
-    public double getVitesseH() {
-        return x;
-    }
-    
-    // la méthode getVitesseV
-    public double getVitesseV() {
-        return y;
-    }
-
     // la méthode setVitesse
     protected void setVitesse(double x, double y) {
         this.x = x; this.y = y;
-    }
-
-    // la méthode setVitesseH
-    protected void setVitesseH(double x) {
-        setVitesse(x, this.y);
-    }
-
-    // la méthode setVitesseV
-    protected void setVitesseV(double y) {
-        setVitesse(this.x, y);
     }
 
     // la méthode vitesseAbsolue

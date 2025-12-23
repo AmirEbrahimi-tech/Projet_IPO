@@ -1,6 +1,5 @@
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -20,12 +19,18 @@ public class Terrain {
          '@' pour une case libre contenant un obstacle
          'O' pour une case libre contenant la bille
     */
+
+    // la méthode getHauteur
     public int getHauteur(){
         return this.hauteur;
     }    
+
+    // la méthode getLargeur
     public int getLargeur(){
         return this.largeur;
     }
+
+    // le constructeur
     public Terrain(String file) {
         try {
             Scanner sc = new Scanner(new FileInputStream(file));
@@ -44,7 +49,7 @@ public class Terrain {
                         case ' ': cc = new CaseTraversable(l, c, new Void()); break;
                         case 'O': cc = new Sortie(l, c,new Void()); break;
                         case '@': cc = new CaseTraversable(l, c, new Obstacle()); break;
-                        case 'T' : cc = new Teleporteur(l, c); 
+                        case 'T': cc = new Teleporteur(l, c); 
                                    if (temp==null){temp = (Teleporteur)cc;} 
                                    else {
                                     ((Teleporteur)cc).setSortie(temp);
