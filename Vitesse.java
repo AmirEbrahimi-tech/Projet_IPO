@@ -20,6 +20,16 @@ public class Vitesse {
 
     // la méthode vitesseAbsolue
     public double vitesseAbsolue() {
-        return Math.abs(x*x + y*y);
+        return Math.sqrt(x*x + y*y);
+    }
+
+    // la méthode renverseV
+    public void renverseV() {
+        y *= -1;
+    }
+
+    // la méthode renverseH
+    public void renverseH() {
+        x *= -1;
     }
 }

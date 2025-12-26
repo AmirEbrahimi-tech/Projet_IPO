@@ -4,7 +4,7 @@ public class Bille2 {
     protected Position pos;
     protected Position positionPrec;
     protected Vitesse vit;
-    protected final int rayon = 20;
+    protected final int rayon = 8;
     // à voir ...
 
     // le constructeur ar défaut
