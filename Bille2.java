@@ -32,13 +32,13 @@ public class Bille2 {
 
     // la méthode estDedans
     public boolean estDedans(double borneX, double borneY) {
-        return ((0 <= pos.x - rayon + vit.x && pos.x + rayon + vit.x <= borneX) && (0 <= pos.y - rayon + vit.y && pos.y + rayon + vit.y <= borneY));
+        return ((0 < pos.x - rayon + vit.x && pos.x + rayon + vit.x < borneX) && (0 < pos.y - rayon + vit.y && pos.y + rayon + vit.y < borneY));
     }
 
     // la méthode deplacer
     public void deplacer() {
         // System.out.println(pos.x + " , " + pos.y);
-        if (estDedans(240, 240)) pos.set(pos.x + vit.x,pos.y + vit.y); // 400 est temporaire!!!!! il faut ajouter une variable static au class fenetreJeu qui contient la taille du fenetre et les utiliser ici
+        if (estDedans(Grille.largeur * Grille.tailleCase, Grille.hauteur * Grille.tailleCase)) pos.set(pos.x + vit.x,pos.y + vit.y); // 400 est temporaire!!!!! il faut ajouter une variable static au class fenetreJeu qui contient la taille du fenetre et les utiliser ici
         frottement();
     }
 

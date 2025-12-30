@@ -5,14 +5,14 @@ public class Demo {
         try {
             while (true) {
                 // System.out.println("dirH : " + grille.bille.getDirectionH() + " dirV : " + grille.bille.getDirectionV());
-                grille.bille.deplacer();
+                // grille.bille.deplacer();
                 grille.repaint();
-                int t = grille.touche();
-                if (t == 1 || t == 3) grille.bille.vit.renverseH();
-                else if (t == 2 || t == 4) grille.bille.vit.renverseV();
+                // int t = grille.touche();
+                // if (t == 1 || t == 3) grille.bille.vit.renverseH();
+                // else if (t == 2 || t == 4) grille.bille.vit.renverseV();
                 Thread.sleep(10);
             }
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
