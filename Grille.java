@@ -1,6 +1,10 @@
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import javax.swing.*;
 
 // la classe de la grille du jeu contenant la bille
@@ -39,8 +43,8 @@ public class Grille extends JPanel implements MouseMotionListener {
         }
     }
 
-    // la méthode rebonde
-    public boolean rebondit() {
+    // la méthode rebonditSurBord
+    public boolean rebonditSurBord() {
         // position actuel de la bille(pour vérifier que la bille est bien placée sur la grille)
         int x = (int) bille.pos.x / tailleCase;
         int y = (int) bille.pos.y / tailleCase;
@@ -65,6 +69,51 @@ public class Grille extends JPanel implements MouseMotionListener {
         Case caseG = getCase(nouvY, xg);    // case à gauche
         Case caseB = getCase(yb, nouvX);    // case en bas
 
+        // 1er = droite, 2nd = dessous, 3eme = gauche, 4eme = dessus
+        if (caseD != null && caseD != courante && caseD instanceof CaseIntraversable) {
+            bille.vit.renverseH();
+            // push the ball just outside the blocking cell to avoid sticking
+            double eps = 1.0;
+            double wallX = xd * tailleCase;
+            // set position to be clearly outside the wall (do not call deplacer here)
+            bille.pos.set(wallX - (bille.rayon + eps), bille.pos.y);
+            return true;
+        } else if (caseB != null && caseB != courante && caseB instanceof CaseIntraversable) {
+            bille.vit.renverseV();
+            double eps = 1.0;
+            double wallY = yb * tailleCase;
+            bille.pos.set(bille.pos.x, wallY - (bille.rayon + eps));
+            return true;
+        } else if (caseG != null && caseG != courante && caseG instanceof CaseIntraversable) {
+            bille.vit.renverseH();
+            double eps = 1.0;
+            double wallX = (xg + 1) * tailleCase;
+            bille.pos.set(wallX + (bille.rayon + eps), bille.pos.y);
+            return true; 
+        } else if (caseH != null && caseH != courante && caseH instanceof CaseIntraversable) {
+            bille.vit.renverseV();
+            double eps = 1.0;
+            double wallY = (yh + 1) * tailleCase;
+            bille.pos.set(bille.pos.x, wallY + (bille.rayon + eps));
+            return true; 
+        } else {
+            return rebonditSurCoin();
+        }
+    }
+
+    // la méthode rebonditSurCoin
+    private boolean rebonditSurCoin() {
+        // position actuel de la bille(pour vérifier que la bille est bien placée sur la grille)
+        int x = (int) bille.pos.x / tailleCase;
+        int y = (int) bille.pos.y / tailleCase;
+        // le rayon de la bille
+        int r = bille.rayon;
+        // position suivant de la bille d'après sa vitesse(et bien sa direction)
+        int nouvX = (int) (bille.pos.x + bille.vit.x) / tailleCase;  // emplacement de la bille après deplacement sur la grille
+        int nouvY = (int) (bille.pos.y + bille.vit.y) / tailleCase;
+
+        Case courante = getCase(y, x);
+
         // nouvelle position de la bille sur la fenêtre
         double cx = bille.pos.x + bille.vit.x;
         double cy = bille.pos.y + bille.vit.y;
@@ -75,81 +124,81 @@ public class Grille extends JPanel implements MouseMotionListener {
         Case caseHG = getCase(nouvY - 1, nouvX - 1);    // case en haut à gauche
         
         // DEBUG: print per-frame diagnostic to help trace collision detection
-        System.out.println("[rebondit] pos(px):(" + bille.pos.x + "," + bille.pos.y + ") grille(x,y):(" + x + "," + y + ") nouv(grille):(" + nouvX + "," + nouvY + ") suivante(px):(" + cx + "," + cy + ")");
-        System.out.println("[rebondit] voisins -> D:" + (caseD instanceof CaseIntraversable) + " B:" + (caseB instanceof CaseIntraversable) + " G:" + (caseG instanceof CaseIntraversable) + " H:" + (caseH instanceof CaseIntraversable) + " HD:" + (caseHD instanceof CaseIntraversable) + " BD:" + (caseBD instanceof CaseIntraversable) + " BG:" + (caseBG instanceof CaseIntraversable) + " HG:" + (caseHG instanceof CaseIntraversable));
+        // System.out.println("[rebondit] pos(px):(" + bille.pos.x + "," + bille.pos.y + ") grille(x,y):(" + x + "," + y + ") nouv(grille):(" + nouvX + "," + nouvY + ") suivante(px):(" + cx + "," + cy + ")");
+        // System.out.println("[rebondit] voisins -> D:" + (caseD instanceof CaseIntraversable) + " B:" + (caseB instanceof CaseIntraversable) + " G:" + (caseG instanceof CaseIntraversable) + " H:" + (caseH instanceof CaseIntraversable) + " HD:" + (caseHD instanceof CaseIntraversable) + " BD:" + (caseBD instanceof CaseIntraversable) + " BG:" + (caseBG instanceof CaseIntraversable) + " HG:" + (caseHG instanceof CaseIntraversable));
 
-        // 1er = droite, 2nd = dessous, 3eme = gauche, 4eme = dessus
-        // 5eme = 13h30, 6eme = 16h30, 7eme = 19h30, 8eme = 22h30 (Position Aiguille Heure)
-        if (caseD != null && caseD != courante && caseD instanceof CaseIntraversable) {
-            bille.vit.renverseH();
-            // bille.deplacer();
-        } else if (caseB != null && caseB != courante && caseB instanceof CaseIntraversable) {
-            bille.vit.renverseV();
-            // bille.deplacer();
-        } else if (caseG != null && caseG != courante && caseG instanceof CaseIntraversable) {
-            bille.vit.renverseH();
-            // bille.deplacer();
-        } else if (caseH != null && caseH != courante && caseH instanceof CaseIntraversable) {
-            bille.vit.renverseV();
-            // bille.deplacer();
-        } else if (caseHD != null && caseHD != courante && caseHD instanceof CaseIntraversable) {
-            bille.deplacer();
+        // 1er = 13h30, 2nd = 16h30, 3eme = 19h30, 4eme = 22h30 (Position Aiguille Heure)
+        Double coinX_ = Double.MAX_VALUE;
+        Double coinY_ = Double.MAX_VALUE;
+        Double r_c = Double.MAX_VALUE;
+        if (caseHD != null && caseHD != courante && caseHD instanceof CaseIntraversable) {
             double coinX = (nouvX + 1) * tailleCase;
             double coinY = (nouvY) * tailleCase;
-            double r_c = Math.sqrt(Math.pow(cx - coinX, 2) +  Math.pow(cy - coinY, 2));
-            if (r_c < r) {
-                // if (r_c == 0) r_c = 0.0001;
-                double dc_x = (cx - coinX) / r_c;
-                double dc_y = (cy - coinY) / r_c;
-                double v_coin = bille.vit.x * dc_x + bille.vit.y * dc_y;
-                bille.vit.setVitesse(bille.vit.x - 2 * v_coin * dc_x, bille.vit.y - 2 * v_coin * dc_y);
-                
+            double distance = Math.sqrt(Math.pow(cx - coinX, 2) +  Math.pow(cy - coinY, 2));
+            if (distance <= r_c) {
+                coinX_ = coinX;
+                coinY_ = coinY;
+                r_c = distance;
             }
-        } else if (caseBD != null && caseBD != courante && caseBD instanceof CaseIntraversable) {
-            bille.deplacer();
+        }
+        if (caseBD != null && caseBD != courante && caseBD instanceof CaseIntraversable) {
+            // bille.deplacer();
             double coinX = (nouvX + 1) * tailleCase;
             double coinY = (nouvY + 1) * tailleCase;
-            double r_c = Math.sqrt(Math.pow(cx - coinX, 2) + Math.pow(cy - coinY, 2));
-            if (r_c < r) {
-                // if (r_c == 0) r_c = 0.0001;
-                double dc_x = (cx - coinX) / r_c;
-                double dc_y = (cy - coinY) / r_c;
-                double v_coin = bille.vit.x * dc_x + bille.vit.y * dc_y;
-                bille.vit.setVitesse(bille.vit.x - 2 * v_coin * dc_x, bille.vit.y - 2 * v_coin * dc_y);
-                
+            double distance = Math.sqrt(Math.pow(cx - coinX, 2) +  Math.pow(cy - coinY, 2));
+            if (distance <= r_c) {
+                coinX_ = coinX;
+                coinY_ = coinY;
+                r_c = distance;
             }
-        } else if (caseBG != null && caseBG != courante && caseBG instanceof CaseIntraversable) {
-            bille.deplacer();
+        }
+        if (caseBG != null && caseBG != courante && caseBG instanceof CaseIntraversable) {
+            // bille.deplacer();
             double coinX = (nouvX) * tailleCase;
             double coinY = (nouvY + 1) * tailleCase;
-            double r_c = Math.sqrt(Math.pow(cx - coinX, 2) + Math.pow(cy - coinY, 2));
-            if (r_c < r) {
-                // if (r_c == 0) r_c = 0.0001;
-                double dc_x = (cx - coinX) / r_c;
-                double dc_y = (cy - coinY) / r_c;
-                double v_coin = bille.vit.x * dc_x + bille.vit.y * dc_y;
-                bille.vit.setVitesse(bille.vit.x - 2 * v_coin * dc_x, bille.vit.y - 2 * v_coin * dc_y);
-                
+            double distance = Math.sqrt(Math.pow(cx - coinX, 2) +  Math.pow(cy - coinY, 2));
+            if (distance <= r_c) {
+                coinX_ = coinX;
+                coinY_ = coinY;
+                r_c = distance;
             }
-        } else if (caseHG != null && caseHG != courante && caseHG instanceof CaseIntraversable) {
-            bille.deplacer();
+        }
+        if (caseHG != null && caseHG != courante && caseHG instanceof CaseIntraversable) {
+            // bille.deplacer();
             double coinX = (nouvX) * tailleCase;
             double coinY = (nouvY) * tailleCase;
-            double r_c = Math.sqrt(Math.pow(cx - coinX, 2) + Math.pow(cy - coinY, 2));
-            if (r_c < r) {
-                // if (r_c == 0) r_c = 0.0001;
-                double dc_x = (cx - coinX) / r_c;
-                double dc_y = (cy - coinY) / r_c;
-                double v_coin = bille.vit.x * dc_x + bille.vit.y * dc_y;
-                bille.vit.setVitesse(bille.vit.x - 2 * v_coin * dc_x, bille.vit.y - 2 * v_coin * dc_y);
-                
+            double distance = Math.sqrt(Math.pow(cx - coinX, 2) +  Math.pow(cy - coinY, 2));
+            if (distance <= r_c) {
+                coinX_ = coinX;
+                coinY_ = coinY;
+                r_c = distance;
             }
-        } 
-        else {
+        }
+
+        if (r_c < r) {
+            double dc_x, dc_y;
+            if (r_c == 0) {
+                // fallback normal: opposite to velocity direction
+                double speed = bille.vit.vitesseAbsolue();
+                if (speed == 0) {
+                    dc_x = 1.0; dc_y = 0.0;
+                } else {
+                    dc_x = -bille.vit.x / speed; dc_y = -bille.vit.y / speed;
+                }
+            } else {
+                dc_x = (cx - coinX_) / r_c;
+                dc_y = (cy - coinY_) / r_c;
+            }
+            double v_coin = bille.vit.x * dc_x + bille.vit.y * dc_y;
+            bille.vit.setVitesse(bille.vit.x - 2 * v_coin * dc_x, bille.vit.y - 2 * v_coin * dc_y);
+            // push the ball outside the corner along the normal to avoid re-collision
+            double eps = 0.1;
+            bille.pos.set(coinX_ + dc_x * (bille.rayon + eps), coinY_ + dc_y * (bille.rayon + eps));
+            return true;
+        } else {
             bille.deplacer();
             return false;
         }
-        return true;
     }
 
     // la méthode contientBille pour debuger et définir l'emplacement de la bille sur la grille est égale aux coordonnées passées en param
@@ -175,7 +224,7 @@ public class Grille extends JPanel implements MouseMotionListener {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        rebondit();
+        rebonditSurBord();
         // bille.deplacer();
 
         for (Case[] ligne : terrain.carte) {
