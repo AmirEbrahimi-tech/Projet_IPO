@@ -82,18 +82,17 @@ public class Grille extends JPanel implements MouseMotionListener {
         // 5eme = 13h30, 6eme = 16h30, 7eme = 19h30, 8eme = 22h30 (Position Aiguille Heure)
         if (caseD != null && caseD != courante && caseD instanceof CaseIntraversable) {
             bille.vit.renverseH();
-            bille.deplacer();
+            // bille.deplacer();
         } else if (caseB != null && caseB != courante && caseB instanceof CaseIntraversable) {
             bille.vit.renverseV();
-            bille.deplacer();
+            // bille.deplacer();
         } else if (caseG != null && caseG != courante && caseG instanceof CaseIntraversable) {
             bille.vit.renverseH();
-            bille.deplacer();
+            // bille.deplacer();
         } else if (caseH != null && caseH != courante && caseH instanceof CaseIntraversable) {
             bille.vit.renverseV();
-            bille.deplacer();
-        } 
-        else if (caseHD != null && caseHD != courante && caseHD instanceof CaseIntraversable) {
+            // bille.deplacer();
+        } else if (caseHD != null && caseHD != courante && caseHD instanceof CaseIntraversable) {
             bille.deplacer();
             double coinX = (nouvX + 1) * tailleCase;
             double coinY = (nouvY) * tailleCase;

@@ -39,7 +39,7 @@ public class Bille2 {
     public void deplacer() {
         // System.out.println(pos.x + " , " + pos.y);
         if (estDedans(Grille.largeur * Grille.tailleCase, Grille.hauteur * Grille.tailleCase)) pos.set(pos.x + vit.x,pos.y + vit.y); // 400 est temporaire!!!!! il faut ajouter une variable static au class fenetreJeu qui contient la taille du fenetre et les utiliser ici
-        frottement();
+        // frottement();
     }
 
     // la méthode frottement

@@ -10,7 +10,7 @@ public class Demo {
                 // int t = grille.touche();
                 // if (t == 1 || t == 3) grille.bille.vit.renverseH();
                 // else if (t == 2 || t == 4) grille.bille.vit.renverseV();
-                Thread.sleep(10);
+                Thread.sleep(20);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
