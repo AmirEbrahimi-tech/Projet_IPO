@@ -1,9 +1,8 @@
-// la classe EntiteMobile
 public class EntiteMobile extends Entite {
-    // les attributs
+    // Attributs
     protected Direction direction;
 
-    // le constrcuteur
+    // Constucteur
     public EntiteMobile(int resistance, Direction dir) {
         super(resistance);
         this.direction = dir;

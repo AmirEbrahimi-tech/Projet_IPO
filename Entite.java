@@ -1,9 +1,9 @@
-// la classe abstrait Entite
+// la classe Entite
 public abstract class Entite {
-    // les attributs
+    // Attributs
     protected int resistance;
 
-    // le constructeur
+    // Constructeur
     public Entite(int resistance) {
         this.resistance = resistance;
     }

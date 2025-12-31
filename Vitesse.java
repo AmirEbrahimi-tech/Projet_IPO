@@ -32,4 +32,9 @@ public class Vitesse {
     public void renverseH() {
         x *= -1;
     }
+
+    public void multiplier(double coeff){
+        x*=coeff;
+        y*=coeff;
+    }
 }

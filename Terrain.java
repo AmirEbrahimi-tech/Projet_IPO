@@ -47,8 +47,8 @@ public class Terrain {
                     switch (ch) {
                         case '#': cc = new CaseIntraversable(l, c); break;
                         case ' ': cc = new CaseTraversable(l, c, new Void()); break;
-                        case 'O': cc = new Sortie(l, c,new Void()); break;
-                        case '@': cc = new CaseTraversable(l, c, new Obstacle()); break;
+                        case 'S': cc = new Sortie(l, c,new Void()); break;
+                        case '@': cc = new CaseTraversable(l, c, new PilierPierre()); break;
                         case 'T': cc = new Teleporteur(l, c); 
                                    if (temp==null){temp = (Teleporteur)cc;} 
                                    else {
@@ -56,6 +56,7 @@ public class Terrain {
                                     temp.setSortie((Teleporteur)cc);
                                     temp = null;
                                    }break;
+                        case '0': cc = new Trou(l, c);break;
                         case 'M': case '3': case 'W': case 'E':
                             cc = new CaseTraversable(l, c, new Monstre(5, Direction.ofChar(ch)));
                             break;

@@ -1,14 +1,9 @@
-// la classe CaseIntraversable
 public class CaseIntraversable extends Case {
-    // les attributs
-
-    // le constructeur
+    // Constructeur
     public CaseIntraversable(int ligne, int colonne) {
         super(ligne, colonne);
     }
 
-    // la méthode estLibre
-    public boolean estVide() {
-        return false;
-    }
+    //Une case intraversable n'est jamais vide
+    public boolean estVide() {return false;}
 }

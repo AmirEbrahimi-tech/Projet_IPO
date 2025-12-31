@@ -1,27 +1,13 @@
-// la classe abstrait Case
 public abstract class Case extends Carre {
-    // les attributs
+    // Attributs
     protected final int ligne,colonne;
 
-    // le constructeur
+    // Constructeur
     public Case(int ligne, int colonne){
         this.ligne = ligne;
         this.colonne = colonne;
     }
-    //Méthodes
-    @Override
-    public void enter(Bille b){
-        
-    }
-
-    @Override
-    public void leave(Bille b){
-
-    }
-
-    @Override
-    public void touche(Bille b){
-
-    }
-    public abstract boolean estVide();
+    public void entre(Bille b){}
+    public void sort(Bille b){}
+    public void touche(Bille b){}
 }
