@@ -1,3 +1,11 @@
+import java.awt.*;
+import java.io.File;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.tools.Tool;
+
 public class Bille {
     // Attributs
     private int vies;
@@ -5,6 +13,9 @@ public class Bille {
     protected Position positionPrec;
     protected Vitesse vit;
     protected final int rayon = 12;
+    private Image imBille;
+    private Clip rebond;
+
     // à voir ...
 
     // Constructeurs
@@ -13,12 +24,23 @@ public class Bille {
         this.positionPrec = null;
         this.vit = new Vitesse();
         this.vies = 3;
+        try{
+        AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("Media/Sons/Rebond.wav"));
+        rebond = AudioSystem.getClip();
+        rebond.open(audioIn);
+        } catch(Exception e){System.err.print(e);}
     }
 
     public Bille(Position pos, Vitesse vit) {
         this.pos = pos; this.vit = vit;
         this.positionPrec = null;
         this.vies = 3;
+        imBille = Toolkit.getDefaultToolkit().getImage("Media/Images/Bille/Bille.gif");
+        try{
+        AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("Media/Sons/Rebond.wav"));
+        rebond = AudioSystem.getClip();
+        rebond.open(audioIn);
+        } catch(Exception e){System.err.print(e);}
     }
 
     // On retourne la direction de la bille
@@ -45,6 +67,22 @@ public class Bille {
     public void frottement() {
         if (vit.vitesseAbsolue() > 0) {
             vit.x *= 0.98; vit.y *= 0.98; // 0.98 doit est remplacé par une variable qui est donnée en fonction de la case qu'on est dessus
+        }
+    }
+
+    public void affiche(Graphics g, Grille grille, int posLigne, int posColonne){
+        g.drawImage(imBille, posColonne, posLigne, grille);
+    }
+
+    public void joueSon(){
+        rebond.setFramePosition(0);
+        rebond.start();
+    }
+
+    public void meurt(FenetreJeu fj){
+        vies--;
+        if(vies<0){
+
         }
     }
 }

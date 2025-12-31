@@ -2,11 +2,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-
-// import java.util.ArrayList;
-// import java.util.HashMap;
-// import java.util.Map;
-// import java.util.NoSuchElementException;
 import javax.swing.*;
 import javax.sound.sampled.*;
 import java.io.File;
@@ -17,17 +12,11 @@ public class Grille extends JPanel implements MouseMotionListener {
     protected Terrain terrain;
     protected static int tailleCase = 32;
     protected static int hauteur, largeur;
-    private JFrame frame;
-    private Robot robot;
+    // private JFrame frame;
+    // private Robot robot;
     protected Bille bille;
     
-    private Image imBille;
-    private Image imMur;
-    private Image imHerbe;
-    private Image imDalle;
-    private Image imVide;
-    
-    private Clip rebond;
+    // private Image imBille;
 
     //Constructeur
     public Grille(Terrain t) {
@@ -37,31 +26,22 @@ public class Grille extends JPanel implements MouseMotionListener {
         /* Mise en place de la fenêtre */
         setBackground(Color.LIGHT_GRAY);
         setPreferredSize(new Dimension(largeur * tailleCase, hauteur *  tailleCase));
-        frame = new JFrame("Enigma");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        // frame = new JFrame("Enigma");
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.setResizable(false);
         bille = new Bille(new Position(largeur*tailleCase/2, hauteur*tailleCase/2), new Vitesse());
         addMouseMotionListener(this);
-        frame.getContentPane().add(this);
-        frame.pack();
-        frame.setVisible(true);
-        try{robot = new Robot();}
-        catch(Exception e){System.err.print(e);}
-        BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-        Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
-        frame.setCursor(blankCursor);
+        // frame.getContentPane().add(this);
+        // frame.pack();
+        // frame.setVisible(true);
+        // try{robot = new Robot();}
+        // catch(Exception e){System.err.print(e);}
+        // BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        // Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
+        // frame.setCursor(blankCursor);
         /* Chargement des images de texture */
-        imBille   = Toolkit.getDefaultToolkit().getImage("Media/Images/Bille.gif");
-        imMur     = Toolkit.getDefaultToolkit().getImage("Media/Images/Mur.png");
-        imHerbe   = Toolkit.getDefaultToolkit().getImage("Media/Images/fond_herbe.png");
-        imDalle   = Toolkit.getDefaultToolkit().getImage("Media/Images/fond_dalle.png");
-        imVide    = Toolkit.getDefaultToolkit().getImage("Media/Images/fond_vide.gif");
-        /* Chargement des sons */
-        try{
-        AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("Media/Sons/Rebond.wav"));
-        rebond = AudioSystem.getClip();
-        rebond.open(audioIn);
-        } catch(Exception e){System.err.print(e);}
+        // imBille   = Toolkit.getDefaultToolkit().getImage("Media/Images/Bille/Bille.gif");
+        
     }
 
     /* ------------------------------ Méthodes ------------------------------------ */
@@ -161,7 +141,7 @@ public class Grille extends JPanel implements MouseMotionListener {
         // System.out.println("[rebondit] pos(px):(" + bille.pos.x + "," + bille.pos.y + ") grille(x,y):(" + x + "," + y + ") nouv(grille):(" + nouvX + "," + nouvY + ") suivante(px):(" + cx + "," + cy + ")");
         // System.out.println("[rebondit] voisins -> D:" + (caseD instanceof CaseIntraversable) + " B:" + (caseB instanceof CaseIntraversable) + " G:" + (caseG instanceof CaseIntraversable) + " H:" + (caseH instanceof CaseIntraversable) + " HD:" + (caseHD instanceof CaseIntraversable) + " BD:" + (caseBD instanceof CaseIntraversable) + " BG:" + (caseBG instanceof CaseIntraversable) + " HG:" + (caseHG instanceof CaseIntraversable));
 
-        // 1er = 13h30, 2nd = 16h30, 3eme = 19h30, 4eme = 22h30 (Position Aiguille Heure)
+        // 1er = 1h30, 2nd = 4h30, 3eme = 7h30, 4eme = 10h30 (Position Aiguille Heure)
         Double coinX_ = Double.MAX_VALUE;
         Double coinY_ = Double.MAX_VALUE;
         Double r_c = Double.MAX_VALUE;
@@ -253,7 +233,7 @@ public class Grille extends JPanel implements MouseMotionListener {
     public void afficheMurs(Graphics g, Case c) {
         // g.setColor(new Color(100, 100, 100, 180));
         // g.fillRect(c.colonne * tailleCase, c.ligne * tailleCase, tailleCase, tailleCase);
-        g.drawImage(imMur, c.colonne * tailleCase, c.ligne * tailleCase,this);
+        ((CaseIntraversable)c).affiche(g, this, c.ligne*tailleCase, c.colonne*tailleCase);
 
     }
 
@@ -262,8 +242,7 @@ public class Grille extends JPanel implements MouseMotionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if(rebonditSurBord()){
-            rebond.setFramePosition(0);
-            rebond.start();
+            bille.joueSon();
         }
         // bille.deplacer();
         for(int ligne = 0;ligne<terrain.carte.length;ligne++){
@@ -271,9 +250,9 @@ public class Grille extends JPanel implements MouseMotionListener {
                 Case c = terrain.carte[ligne][colonne];
                 if (c == null) continue;
                 if (c instanceof CaseIntraversable) afficheMurs(g, c);
-                else if (c instanceof Trou){g.drawImage(imVide , colonne*tailleCase , ligne*tailleCase , this);}
+                else if (c instanceof Trou){((Trou)c).affiche(g,this,ligne*tailleCase,colonne*tailleCase);}
                 else if (c instanceof CaseTraversable){
-                    if (((Case)c).estVide()) g.drawImage(imDalle,colonne*tailleCase, ligne*tailleCase,this);
+                    if (((Case)c).estVide()) ((CaseTraversable)c).affiche(g,this,ligne*tailleCase,colonne*tailleCase);
                 }
                 else if (contientBille(ligne, colonne)) {
                     g.setColor(new Color(20, 230, 170)); // just random numbers :)
@@ -304,7 +283,7 @@ public class Grille extends JPanel implements MouseMotionListener {
 //         }
         // g.setColor(new Color(255, 0, 0, 127));
         // g.fillOval((int) bille.pos.x - bille.rayon, (int) bille.pos.y - bille.rayon, bille.rayon*2, bille.rayon*2);
-        g.drawImage(imBille,(int) bille.pos.x - bille.rayon, (int) bille.pos.y - bille.rayon,this);
+        // g.drawImage(imBille,(int) bille.pos.x - bille.rayon, (int) bille.pos.y - bille.rayon,this);
 
     }
 
@@ -316,27 +295,6 @@ public class Grille extends JPanel implements MouseMotionListener {
     public void mouseDragged(MouseEvent e) {
         System.out.println("Not supported yet.");
     }
-
-    // @Override
-    // public void mouseMoved(MouseEvent e) {
-    //     Position courant = mousePosition(e);
-    //     Point center = new Point(getLocationOnScreen().x + getWidth()/2 , getLocationOnScreen().y + getHeight()/2);
-    //     // System.out.println("Courant: " + courant.x + " , " + courant.y);
-    //     // System.out.println(toucher());
-
-    //     if (bille.positionPrec != null) {
-    //         double dx = courant.x - center.x;
-    //         double dy = courant.y - center.y;
-    //         // System.out.println("Différence: " + dx + " , " + dy);
-    //         bille.vit.setVitesse(dx * 0.05, dy * 0.05); // il faut y ajouter (comme le facteur de frottement) un facteur d'acceleration en fonction de la case qu'on est dedans
-    //     }
-
-    //     // bille.positionPrec = courant;
-    //     // try{Thread.sleep(8);}
-    //     // catch(InterruptedException error){System.err.print(error);}
-        
-    //     robot.mouseMove(center.x, center.y);
-    // }
 
     @Override
     public void mouseMoved(MouseEvent e) {

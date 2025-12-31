@@ -1,3 +1,5 @@
+import java.awt.*;
+import javax.swing.*;
 public class EntiteMobile extends Entite {
     // Attributs
     protected Direction direction;
@@ -7,4 +9,6 @@ public class EntiteMobile extends Entite {
         super(resistance);
         this.direction = dir;
     }
+
+    public void affiche(Graphics g, Grille grille,int posLigne, int posColonne) {}
 }

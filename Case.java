@@ -1,3 +1,5 @@
+import java.awt.*;
+import javax.swing.*;
 public abstract class Case extends Carre {
     // Attributs
     protected final int ligne,colonne;
@@ -7,6 +9,7 @@ public abstract class Case extends Carre {
         this.ligne = ligne;
         this.colonne = colonne;
     }
+    public abstract void affiche(Graphics g, Grille grille, int posLigne, int posColonne);
     public void entre(Bille b){}
     public void sort(Bille b){}
     public void touche(Bille b){}

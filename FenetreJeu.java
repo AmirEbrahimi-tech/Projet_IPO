@@ -1,42 +1,54 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+
 import javax.swing.*;
 
 public class FenetreJeu extends JPanel {
-    private Terrain terrain;
-    private int tailleCase = 24;
+    private Grille grille;
+    private int tailleCase = 32;
     private int hauteur, largeur;
     private JFrame frame;
-    // protected Bille bille;
+    private Robot robot;
 
-    public FenetreJeu(Terrain t) {
-        this.hauteur = t.getHauteur();
-        this.largeur = t.getLargeur();
-        this.terrain = t;
-
+    public FenetreJeu(Grille grille) {
+        this.hauteur = grille.terrain.getHauteur();
+        this.largeur = grille.terrain.getLargeur();
         setBackground(Color.LIGHT_GRAY);
         setPreferredSize(new Dimension(largeur * tailleCase, hauteur * tailleCase));
-
-        this.frame = new JFrame("Donjon");
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // this.bille = new Bille(new Position(hauteur*tailleCase/2, largeur*tailleCase/2), new Vitesse());
-        this.frame.getContentPane().add(this);
-        this.frame.pack();
-        this.frame.setVisible(true);
+        frame = new JFrame("Fenetre jeu");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(this);
+        frame.pack();
+        frame.setVisible(true);
+        try{robot = new Robot();}
+        catch(Exception e){System.err.print(e);}
+        BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
+        frame.setCursor(blankCursor);
     }
 
-    // la méthode pour dessinner les loups
-    public void afficheLoup(Graphics g, Case c) {
-        Entite ent = ((CaseTraversable) c).getContenu();
-        if (!(ent instanceof Monstre)) return;
-        g.setColor(Color.RED);
-        g.fillOval(c.colonne*tailleCase, c.ligne*tailleCase, tailleCase, tailleCase);
-        g.setColor(Color.BLACK);
-        switch(((Monstre) ent).direction) {
-            case nord -> g.fillOval(c.colonne*tailleCase + tailleCase/2 - 2, c.ligne*tailleCase, 4, 4);
-            case sud -> g.fillOval(c.colonne*tailleCase + tailleCase/2 - 2, (c.ligne+1)*tailleCase - 4, 4, 4);
-            case est -> g.fillOval((c.colonne+1)*tailleCase - 4, c.ligne*tailleCase + tailleCase/2 - 2, 4, 4);
-            case ouest -> g.fillOval(c.colonne*tailleCase, c.ligne*tailleCase + tailleCase/2 - 2, 4, 4);
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if(grille.rebonditSurBord()){
+            grille.bille.joueSon();
         }
+        for(int ligne = 0;ligne<grille.terrain.carte.length;ligne++){
+            for(int colonne = 0;colonne<grille.terrain.carte[0].length;colonne++){
+                Case c = grille.terrain.carte[ligne][colonne];
+                if (c == null) continue;
+                if (c instanceof CaseIntraversable) afficheMurs(g, c);
+                else if (c instanceof Trou){((Trou)c).affiche(g,grille,ligne*tailleCase,colonne*tailleCase);}
+                else if (c instanceof CaseTraversable){
+                    if (((Case)c).estVide()) ((CaseTraversable)c).affiche(g,grille,ligne*tailleCase,colonne*tailleCase);
+                }
+                else if (grille.contientBille(ligne, colonne)) {
+                    g.setColor(new Color(20, 230, 170)); // just random numbers :)
+                    g.fillRect(colonne * tailleCase, ligne * tailleCase, tailleCase, tailleCase);
+                }
+            }
+        }
+        grille.bille.affiche(g,grille,(int) grille.bille.pos.x - grille.bille.rayon, (int) grille.bille.pos.y - grille.bille.rayon);
     }
 
     // la méthode pour dessinner les moutons
@@ -83,30 +95,6 @@ public class FenetreJeu extends JPanel {
         g.fillOval(c.colonne*tailleCase - 1, c.ligne*tailleCase - 1, tailleCase+2, tailleCase+2);
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        
-        /* À compléter */
-        for (Case[] ligne : this.terrain.carte) {
-            for (Case c : ligne) {
-                try {
-                    if (c instanceof CaseIntraversable) afficheMurs(g, c);
-                    else if (c instanceof Sortie) afficheSortie(g, c);
-                    else if (c instanceof Teleporteur) afficheTeleporteur(g, c);
-                    else if (c instanceof CaseTraversable caseTraversable) {
-                        Entite contenu = caseTraversable.getContenu();
-                        if (contenu instanceof Monstre) afficheLoup(g, c);
-                        else if (contenu instanceof Personnage) afficheMouton(g, c);
-                        else if (contenu instanceof Obstacle) afficheObs(g, c);
-                    }
-                } catch (Exception e) {}
-            }
-        }
-        // g.setColor(new Color(255, 0, 0, 127));
-        // g.fillOval((int) bille.pos.x - bille.rayon, (int) bille.pos.y - bille.rayon, bille.rayon*2, bille.rayon*2);
-    }
-
     public void ecranFinal(int n) {
         frame.remove(this);
         JLabel label = new JLabel("Score " + n);
@@ -116,15 +104,4 @@ public class FenetreJeu extends JPanel {
         frame.getContentPane().add(label);
         frame.repaint();
     }
-
-    // @Override
-    // public void mouseDragged(MouseEvent e) {
-    //     System.out.println("ok!?");
-    // }
-
-    // @Override
-    // public void mouseMoved(MouseEvent e) {
-    //     System.out.println("huh?");
-    //     this.bille.mouseMoved(e);
-    // }
 }
