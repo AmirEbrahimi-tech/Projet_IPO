@@ -39,31 +39,31 @@ public class Terrain {
             sc.nextLine();
             this.carte = new Case[hauteur][largeur];
             Teleporteur temp = null;
-            for (int l=0; l<hauteur; l++) {
+            for (int y=0; y<hauteur; y++) {
                 String line = sc.nextLine();
-                for (int c=0; c<largeur; c++) {
+                for (int x=0; x<largeur; x++) {
                     Case cc;
-                    Character ch = line.charAt(c);
+                    Character ch = line.charAt(x);
                     switch (ch) {
-                        case '#': cc = new CaseIntraversable(l, c); break;
-                        case ' ': cc = new CaseTraversable(l, c, new Void()); break;
-                        case 'S': cc = new Sortie(l, c,new Void()); break;
-                        case '@': cc = new CaseTraversable(l, c, new PilierPierre()); break;
-                        case 'T': cc = new Teleporteur(l, c); 
+                        case '#': cc = new CaseIntraversable(x, y); break;
+                        case ' ': cc = new CaseTraversable(x, y, new Void()); break;
+                        case 'S': cc = new Sortie(x, y,new Void()); break;
+                        case '@': cc = new CaseTraversable(x,y, new PilierPierre()); break;
+                        case 'T': cc = new Teleporteur(x, y); 
                                    if (temp==null){temp = (Teleporteur)cc;} 
                                    else {
                                     ((Teleporteur)cc).setSortie(temp);
                                     temp.setSortie((Teleporteur)cc);
                                     temp = null;
                                    }break;
-                        case '0': cc = new Trou(l, c);break;
+                        case '0': cc = new Trou(x, y);break;
                         case 'M': case '3': case 'W': case 'E':
-                            cc = new CaseTraversable(l, c, new Monstre(5, Direction.ofChar(ch)));
+                            cc = new CaseTraversable(x, y, new Monstre(5, Direction.ofChar(ch)));
                             break;
-                        case 'X': cc = new CaseTraversable(l, c, new Personnage(5, Direction.nord));break;
+                        case 'X': cc = new CaseTraversable(x, y, new Personnage(5, Direction.nord));break;
                         default:  cc = null; break;
                     }
-                    carte[l][c] = cc;
+                    carte[y][x] = cc;
                 }
             }
             sc.close();

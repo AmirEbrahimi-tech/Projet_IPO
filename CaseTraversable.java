@@ -4,8 +4,8 @@ public class CaseTraversable extends Case {
     protected Entite contenu;
     private Image imDalle;
     // Constructeur
-    public CaseTraversable(int ligne, int colonne, Entite e) {
-        super(ligne,colonne);
+    public CaseTraversable(int x, int y, Entite e) {
+        super(x,y);
         this.contenu = e;
         imDalle = Toolkit.getDefaultToolkit().getImage("Media/Images/Fonds/fond_dalle.png");
     }
@@ -31,7 +31,7 @@ public class CaseTraversable extends Case {
     }
 
     @Override
-    public void affiche(Graphics g,  Grille grille, int posLigne, int posColonne){
-        contenu.affiche(g, grille, posLigne, posColonne);
+    public void affiche(Graphics g,  Grille grille, Case c){
+        contenu.affiche(g, grille,c);
     }
 }

@@ -9,6 +9,6 @@ public class Obstacle extends Entite {
         super(resistance);
     }
 
-    public void affiche(Graphics g, Grille grille,int posLigne, int posColonne) {
+    public void affiche(Graphics g, Grille grille, Case c) {
     }
 }

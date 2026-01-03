@@ -10,5 +10,5 @@ public abstract class Entite {
         this.resistance = resistance;
     }
 
-    public abstract void affiche(Graphics g, Grille grille, int posLigne, int posColonne);
+    public abstract void affiche(Graphics g, Grille grille ,Case c);
 } 

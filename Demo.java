@@ -1,7 +1,7 @@
 public class Demo {
     
     public static void main(String[] args) {
-        Jeu jeu = new Jeu("Maps/labyTrou.txt"); //On charge le fichier text
+        Jeu jeu = new Jeu("Maps/laby_test2.txt"); //On charge le fichier text
         Grille grille = new Grille(jeu.terrain);
         FenetreJeu fj = new FenetreJeu(grille);
         try {

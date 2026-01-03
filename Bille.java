@@ -70,8 +70,8 @@ public class Bille {
         }
     }
 
-    public void affiche(Graphics g, Grille grille, int posLigne, int posColonne){
-        g.drawImage(imBille, posColonne, posLigne, grille);
+    public void affiche(Graphics g, Grille grille){
+        g.drawImage(imBille, (int)pos.x - rayon , (int)pos.y - rayon, grille);
     }
 
     public void joueSon(){

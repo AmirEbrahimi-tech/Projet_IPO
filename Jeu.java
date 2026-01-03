@@ -39,7 +39,7 @@ public class Jeu {
             } else if (c.getContenu() instanceof Monstre) {
                 type = "monstre";
             } else type = "???";
-            System.out.println("case : (" + c.ligne + "," + c.colonne + ") type : " + type + " résistance : " + c.getContenu().resistance);
+            System.out.println("case : (" + c.y + "," + c.x + ") type : " + type + " résistance : " + c.getContenu().resistance);
         }
     }
 
@@ -110,40 +110,40 @@ public class Jeu {
     //     // ent.action(src, target);
     // }
 
-    public void deplacement(KeyEvent e){
-        CaseTraversable perso = null;
-        for (int i = 0; i < terrain.carte.length; i++) {
-            for (int j = 0; j < terrain.carte[0].length; j++) {
-                Case c = terrain.carte[i][j];
-                if (c instanceof CaseTraversable) {
-                    Entite en = ((CaseTraversable) c).getContenu();
-                    if (en instanceof Personnage) {
-                        perso = (CaseTraversable)c;
-                        break;
-                    }
-                }
-            }
-        }
-        Personnage p = (Personnage) perso.getContenu();
+    // public void deplacement(KeyEvent e){
+    //     CaseTraversable perso = null;
+    //     for (int i = 0; i < terrain.carte.length; i++) {
+    //         for (int j = 0; j < terrain.carte[0].length; j++) {
+    //             Case c = terrain.carte[i][j];
+    //             if (c instanceof CaseTraversable) {
+    //                 Entite en = ((CaseTraversable) c).getContenu();
+    //                 if (en instanceof Personnage) {
+    //                     perso = (CaseTraversable)c;
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     Personnage p = (Personnage) perso.getContenu();
 
-        int newLig = perso.ligne;
-        int newCol = perso.colonne;
+    //     int newLig = perso.ligne;
+    //     int newCol = perso.colonne;
 
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP    : 
-                if(perso.ligne-1>=0) newLig = perso.ligne - 1;break;
-            case KeyEvent.VK_DOWN  :
-                if(perso.ligne+1<=terrain.carte.length) newLig = perso.ligne + 1;break;
-            case KeyEvent.VK_RIGHT :
-                if(perso.colonne-1>=0) newCol = perso.colonne + 1;break;
-            case KeyEvent.VK_LEFT  :
-                if(perso.colonne+1<=terrain.carte[0].length) newCol = perso.colonne - 1;break;
-            default:
-                return;
-        }
-        Case target = terrain.carte[newLig][newCol];
-        p.deplacement(perso, target);
-    }
+    //     switch (e.getKeyCode()) {
+    //         case KeyEvent.VK_UP    : 
+    //             if(perso.ligne-1>=0) newLig = perso.ligne - 1;break;
+    //         case KeyEvent.VK_DOWN  :
+    //             if(perso.ligne+1<=terrain.carte.length) newLig = perso.ligne + 1;break;
+    //         case KeyEvent.VK_RIGHT :
+    //             if(perso.colonne-1>=0) newCol = perso.colonne + 1;break;
+    //         case KeyEvent.VK_LEFT  :
+    //             if(perso.colonne+1<=terrain.carte[0].length) newCol = perso.colonne - 1;break;
+    //         default:
+    //             return;
+    //     }
+    //     Case target = terrain.carte[newLig][newCol];
+    //     p.deplacement(perso, target);
+    // }
 
     // public static void main(String[] args) {
     //     Integer score = 0;

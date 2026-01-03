@@ -4,8 +4,8 @@ import javax.tools.Tool;
 public class CaseIntraversable extends Case {
     private Image imMur;
     // Constructeur
-    public CaseIntraversable(int ligne, int colonne) {
-        super(ligne, colonne);
+    public CaseIntraversable(int x, int y) {
+        super(x, y);
         imMur = Toolkit.getDefaultToolkit().getImage("Media/Images/Cases/Mur.png");
     }
 
@@ -13,7 +13,8 @@ public class CaseIntraversable extends Case {
     public boolean estVide() {return false;}
 
     @Override
-    public void affiche(Graphics g,  Grille grille, int posLigne, int posColonne){
-        g.drawImage(imMur, posColonne , posLigne, grille);
+    public void affiche(Graphics g,  Grille grille, Case c){
+        // System.out.print("On dessine le mur\n");
+        g.drawImage(imMur, c.x*grille.tailleCase , c.y*grille.tailleCase, grille);
     }
 }

@@ -7,7 +7,7 @@ import javax.sound.sampled.*;
 import java.io.File;
 
 // la classe de la grille du jeu contenant la bille
-public class Grille extends JPanel implements MouseMotionListener {
+public class Grille extends JPanel{
     // Attributs
     protected Terrain terrain;
     protected static int tailleCase = 32;
@@ -30,7 +30,7 @@ public class Grille extends JPanel implements MouseMotionListener {
         // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // frame.setResizable(false);
         bille = new Bille(new Position(largeur*tailleCase/2, hauteur*tailleCase/2), new Vitesse());
-        addMouseMotionListener(this);
+        // addMouseMotionListener(this);
         // frame.getContentPane().add(this);
         // frame.pack();
         // frame.setVisible(true);
@@ -72,12 +72,12 @@ public class Grille extends JPanel implements MouseMotionListener {
         if (courante == null) throw new NullPointerException("bille n'est pas bien localisée sur la grille!");
 
         // DEBUG
-        // System.out.println("[rebondit] pos(px):(" + bille.pos.x + "," + bille.pos.y + ") (lig,col):(" + y + "," + x + ") nouv(lig,col):(" + nouvY + "," + nouvX + ")");
+        System.out.println("[rebondit] pos(px):(" + bille.pos.x + "," + bille.pos.y + ") (lig,col):(" + y + "," + x + ") nouv(lig,col):(" + nouvY + "," + nouvX + ")");
 
-        Case caseD = getCase(nouvY, xd);    // case à droite
-        Case caseH = getCase(yh, nouvX);    // case en haut
-        Case caseG = getCase(nouvY, xg);    // case à gauche
-        Case caseB = getCase(yb, nouvX);    // case en bas
+        Case caseD = getCase(nouvY,xd);    // case à droite
+        Case caseH = getCase(yh,nouvX);    // case en haut
+        Case caseG = getCase(nouvY,xg);    // case à gauche
+        Case caseB = getCase(yb,nouvX);    // case en bas
 
         // 1er = droite, 2nd = dessous, 3eme = gauche, 4eme = dessus
         if (caseD != null && caseD != courante && ! caseD.estVide()) {
@@ -138,8 +138,8 @@ public class Grille extends JPanel implements MouseMotionListener {
         Case caseHG = getCase(nouvY - 1, nouvX - 1);    // case en haut à gauche
         
         // DEBUG: print per-frame diagnostic to help trace collision detection
-        // System.out.println("[rebondit] pos(px):(" + bille.pos.x + "," + bille.pos.y + ") grille(x,y):(" + x + "," + y + ") nouv(grille):(" + nouvX + "," + nouvY + ") suivante(px):(" + cx + "," + cy + ")");
-        // System.out.println("[rebondit] voisins -> D:" + (caseD instanceof CaseIntraversable) + " B:" + (caseB instanceof CaseIntraversable) + " G:" + (caseG instanceof CaseIntraversable) + " H:" + (caseH instanceof CaseIntraversable) + " HD:" + (caseHD instanceof CaseIntraversable) + " BD:" + (caseBD instanceof CaseIntraversable) + " BG:" + (caseBG instanceof CaseIntraversable) + " HG:" + (caseHG instanceof CaseIntraversable));
+        System.out.println("[rebondit] pos(px):(" + bille.pos.x + "," + bille.pos.y + ") grille(x,y):(" + x + "," + y + ") nouv(grille):(" + nouvX + "," + nouvY + ") suivante(px):(" + cx + "," + cy + ")");
+        System.out.println("[rebondit] voisins -> HD:" + (caseHD instanceof CaseIntraversable) + " BD:" + (caseBD instanceof CaseIntraversable) + " BG:" + (caseBG instanceof CaseIntraversable) + " HG:" + (caseHG instanceof CaseIntraversable));
 
         // 1er = 1h30, 2nd = 4h30, 3eme = 7h30, 4eme = 10h30 (Position Aiguille Heure)
         Double coinX_ = Double.MAX_VALUE;
@@ -230,35 +230,17 @@ public class Grille extends JPanel implements MouseMotionListener {
     }
 
     // la méthode pour dessinner les murs
-    public void afficheMurs(Graphics g, Case c) {
-        // g.setColor(new Color(100, 100, 100, 180));
-        // g.fillRect(c.colonne * tailleCase, c.ligne * tailleCase, tailleCase, tailleCase);
-        ((CaseIntraversable)c).affiche(g, this, c.ligne*tailleCase, c.colonne*tailleCase);
+    // public void afficheMurs(Graphics g, Case c) {
+    //     // g.setColor(new Color(100, 100, 100, 180));
+    //     // g.fillRect(c.colonne * tailleCase, c.ligne * tailleCase, tailleCase, tailleCase);
+    //     ((CaseIntraversable)c).affiche(g, this, c.ligne*tailleCase, c.colonne*tailleCase);
 
-    }
+    // }
 
     // la méthode paintComponent
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if(rebonditSurBord()){
-            bille.joueSon();
-        }
-        // bille.deplacer();
-        for(int ligne = 0;ligne<terrain.carte.length;ligne++){
-            for(int colonne = 0;colonne<terrain.carte[0].length;colonne++){
-                Case c = terrain.carte[ligne][colonne];
-                if (c == null) continue;
-                if (c instanceof CaseIntraversable) afficheMurs(g, c);
-                else if (c instanceof Trou){((Trou)c).affiche(g,this,ligne*tailleCase,colonne*tailleCase);}
-                else if (c instanceof CaseTraversable){
-                    if (((Case)c).estVide()) ((CaseTraversable)c).affiche(g,this,ligne*tailleCase,colonne*tailleCase);
-                }
-                else if (contientBille(ligne, colonne)) {
-                    g.setColor(new Color(20, 230, 170)); // just random numbers :)
-                    g.fillRect(colonne * tailleCase, ligne * tailleCase, tailleCase, tailleCase);
-                }
-            }
         }
 //         for (Case[] ligne : terrain.carte) {
 //             for (Case c : ligne) {
@@ -285,26 +267,24 @@ public class Grille extends JPanel implements MouseMotionListener {
         // g.fillOval((int) bille.pos.x - bille.rayon, (int) bille.pos.y - bille.rayon, bille.rayon*2, bille.rayon*2);
         // g.drawImage(imBille,(int) bille.pos.x - bille.rayon, (int) bille.pos.y - bille.rayon,this);
 
-    }
+    
 
     private Position mousePosition(java.awt.event.MouseEvent e) {
         return new Position(e.getX(), e.getY());
     }
 
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        System.out.println("Not supported yet.");
-    }
+    // @Override
+    // public void mouseDragged(MouseEvent e) {
+    //     System.out.println("Not supported yet.");
+    // }
 
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        Point location = getLocationOnScreen();
-        Point center = new Point(location.x + getWidth()/2,location.y + getHeight()/2);
-        int dx = e.getXOnScreen() - center.x;
-        int dy = e.getYOnScreen() - center.y;
-        bille.vit.setVitesse(bille.vit.x + dx*0.005, bille.vit.y + dy*0.005);
-        robot.mouseMove(center.x, center.y);
-    }
-
-
+    // @Override
+    // public void mouseMoved(MouseEvent e) {
+    //     Point location = getLocationOnScreen();
+    //     Point center = new Point(location.x + getWidth()/2,location.y + getHeight()/2);
+    //     int dx = e.getXOnScreen() - center.x;
+    //     int dy = e.getYOnScreen() - center.y;
+    //     bille.vit.setVitesse(bille.vit.x + dx*0.005, bille.vit.y + dy*0.005);
+    //     robot.mouseMove(center.x, center.y);
+    // }
 }

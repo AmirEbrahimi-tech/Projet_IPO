@@ -23,17 +23,19 @@ public class PilierPierre extends Obstacle {
     }
 
     @Override
-    public void affiche(Graphics g, Grille grille,int posLigne, int posColonne) {
-        if (resistance == 5) {
-            g.drawImage(imPierre5, posColonne , posLigne, grille);
-        } else if (resistance == 4) {
-            g.drawImage(imPierre4, posColonne , posLigne, grille);
-        } else if (resistance == 3) {
-            g.drawImage(imPierre3, posColonne , posLigne, grille);
-        } else if (resistance == 2) {
-            g.drawImage(imPierre2, posColonne , posLigne, grille);
-        } else {
-            g.drawImage(imPierre1, posColonne , posLigne, grille);
-        }
-    }
+    public void affiche(Graphics g, Grille grille, Case c) {}
+    //     if (resistance == 5) {
+    //         g.drawImage(imPierre5, c.x*grille.tailleCase , c.y*grille.tailleCase, grille);
+    //     } else if (resistance == 4) {
+    //         g.drawImage(imPierre4, posColonne , posLigne, grille);
+    //     } else if (resistance == 3) {
+    //         g.drawImage(imPierre3, posColonne , posLigne, grille);
+    //     } else if (resistance == 2) {
+    //         g.drawImage(imPierre2, posColonne , posLigne, grille);
+    //     } else {
+    //         g.drawImage(imPierre1, posColonne , posLigne, grille);
+    //     }
+    //     switch(r) {
+    //     }
+    // }
 }
