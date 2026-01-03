@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 // la classe PilierPierre un sous-type d'obstacle avec 5 points de vie
 public class PilierPierre extends Obstacle {
@@ -13,29 +16,24 @@ public class PilierPierre extends Obstacle {
     // le constructeur
     public PilierPierre() {
         // Initialisation de sa résistance
-        super(3);
+        super(5);
         // Chargement des images de texture
-        imPierre1   = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/Pilier_Pierre/pilier_pierre_0.png");
-        imPierre2   = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/Pilier_Pierre/pilier_pierre_1.png");
-        imPierre3   = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/Pilier_Pierre/pilier_pierre_2.png");
-        imPierre4   = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/Pilier_Pierre/pilier_pierre_3.png");
-        imPierre5   = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/Pilier_Pierre/pilier_pierre_4.png");
+        imPierre1 = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/pilier_pierre_0.png");
+        imPierre2 = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/pilier_pierre_1.png");
+        imPierre3 = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/pilier_pierre_2.png");
+        imPierre4 = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/pilier_pierre_3.png");
+        imPierre5 = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/pilier_pierre_4.png");
+        
     }
 
     @Override
-    public void affiche(Graphics g, Grille grille, Case c) {}
-    //     if (resistance == 5) {
-    //         g.drawImage(imPierre5, c.x*grille.tailleCase , c.y*grille.tailleCase, grille);
-    //     } else if (resistance == 4) {
-    //         g.drawImage(imPierre4, posColonne , posLigne, grille);
-    //     } else if (resistance == 3) {
-    //         g.drawImage(imPierre3, posColonne , posLigne, grille);
-    //     } else if (resistance == 2) {
-    //         g.drawImage(imPierre2, posColonne , posLigne, grille);
-    //     } else {
-    //         g.drawImage(imPierre1, posColonne , posLigne, grille);
-    //     }
-    //     switch(r) {
-    //     }
-    // }
+    public void affiche(Graphics g, FenetreJeu fj, Case c) {
+        switch(resistance) {
+            case 5 -> g.drawImage(imPierre5, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
+            case 4 -> g.drawImage(imPierre4, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
+            case 3 -> g.drawImage(imPierre3, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
+            case 2 -> g.drawImage(imPierre2, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
+            case 1 -> g.drawImage(imPierre1, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
-public abstract class Case extends Carre {
+public abstract class Case {
     // Attributs
     protected final int x,y;
 
@@ -9,8 +9,9 @@ public abstract class Case extends Carre {
         this.x = x;
         this.y = y;
     }
-    public abstract void affiche(Graphics g, Grille grille, Case c);
-    public void entre(Bille b){}
-    public void sort(Bille b){}
-    public void touche(Bille b){}
+    public abstract void affiche(Graphics g, FenetreJeu fj, Case c);
+    public abstract boolean estVide();
+    public abstract void entre(Bille b);
+    public abstract void sort(Bille b);
+    public abstract void touche(Bille b);
 }

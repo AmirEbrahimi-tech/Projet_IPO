@@ -10,8 +10,8 @@ public class Trou extends CaseTraversable{
     }
 
     @Override
-    public void affiche(Graphics g,  Grille grille, Case c){
-        g.drawImage(imTrou, c.x*grille.tailleCase , c.y*grille.tailleCase, grille);
+    public void affiche(Graphics g,  FenetreJeu fj, Case c){
+        g.drawImage(imTrou, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
     }
     @Override
     public void entre(Bille b){

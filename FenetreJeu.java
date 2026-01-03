@@ -2,20 +2,21 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.lang.instrument.ClassDefinition;
 
 import javax.swing.*;
 
 public class FenetreJeu extends JPanel implements MouseMotionListener{
-    private Grille grille;
+    private Jeu jeu;
     private int tailleCase = 32;
     private int hauteur, largeur;
     private JFrame frame;
     private Robot robot;
 
-    public FenetreJeu(Grille g) {
-        grille = g;
-        hauteur = grille.terrain.getHauteur();
-        largeur = grille.terrain.getLargeur();
+    public FenetreJeu(Jeu j) {
+        jeu = j;
+        hauteur = jeu.terrain.getHauteur();
+        largeur = jeu.terrain.getLargeur();
 
         setBackground(Color.LIGHT_GRAY);
         setPreferredSize(new Dimension(largeur * tailleCase, hauteur * tailleCase));
@@ -37,26 +38,19 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        grille.repaint();
-        if(grille.rebonditSurBord()){
-            grille.bille.joueSon();
+        if(jeu.rebonditSurBord()){
+            jeu.bille.joueSon();
         }
         for(int y = 0;y<hauteur;y++){
             for(int x = 0;x<largeur;x++){
-                Case c = grille.terrain.carte[y][x];
+                Case c = jeu.terrain.carte[y][x];
                 if (c == null) continue;
-                if (c instanceof CaseIntraversable) ((CaseIntraversable)c).affiche(g,grille,c);
-                else if (c instanceof Trou) ((Trou)c).affiche(g,grille,c);
-                else if (c instanceof CaseTraversable){
-                    if (((Case)c).estVide()) ((CaseTraversable)c).affiche(g,grille,c);
-                }
-                // else if (grille.contientBille(ligne, colonne)) {
-                //     g.setColor(new Color(20, 230, 170)); // just random numbers :)
-                //     g.fillRect(colonne * tailleCase, ligne * tailleCase, tailleCase, tailleCase);
-                // }
+                if (c instanceof CaseIntraversable) ((CaseIntraversable)c).affiche(g,this,c);
+                else if (c instanceof Trou) ((Trou)c).affiche(g,this,c);
+                else if (c instanceof CaseTraversable) ((CaseTraversable)c).affiche(g,this,c);
             }
         }
-        grille.bille.affiche(g,grille);
+        jeu.bille.affiche(g,this);
     }
 
     @Override
@@ -68,22 +62,9 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
         Point center = new Point(location.x + getWidth()/2,location.y + getHeight()/2);
         int dx = e.getXOnScreen() - center.x;
         int dy = e.getYOnScreen() - center.y;
-        grille.bille.vit.setVitesse(grille.bille.vit.x + dx*0.005, grille.bille.vit.y + dy*0.005);
+        jeu.bille.getVitesse().setVitesse(jeu.bille.getVitesseX() + dx*0.005, jeu.bille.getVitesseY() + dy*0.005);
         robot.mouseMove(center.x, center.y);
     }
-
-
-    // la méthode pour dessinner les obstacles
-    // public void afficheObs(Graphics g, Case c) {
-    //     Entite ent = ((CaseTraversable) c).getContenu();
-    //     if (!(ent instanceof Obstacle)) return;
-    //     switch(ent.resistance) {
-    //         case 3 -> g.setColor(Color.BLACK);
-    //         case 2 -> g.setColor(new Color(200,200,200));
-    //         case 1 -> g.setColor(new Color(120,120,120));
-    //     }
-    //     g.fillOval(c.colonne*tailleCase, c.ligne*tailleCase, tailleCase, tailleCase);
-    // }
 
     public void ecranFinal(int n) {
         frame.remove(this);

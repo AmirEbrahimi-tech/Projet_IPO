@@ -57,10 +57,6 @@ public class Terrain {
                                     temp = null;
                                    }break;
                         case '0': cc = new Trou(x, y);break;
-                        case 'M': case '3': case 'W': case 'E':
-                            cc = new CaseTraversable(x, y, new Monstre(5, Direction.ofChar(ch)));
-                            break;
-                        case 'X': cc = new CaseTraversable(x, y, new Personnage(5, Direction.nord));break;
                         default:  cc = null; break;
                     }
                     carte[y][x] = cc;

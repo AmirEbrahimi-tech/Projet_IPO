@@ -10,12 +10,6 @@ public class CaseTraversable extends Case {
         imDalle = Toolkit.getDefaultToolkit().getImage("Media/Images/Fonds/fond_dalle.png");
     }
 
-    //Méthodes
-    @Override
-    public boolean estVide(){
-        return this.contenu instanceof Void;    
-    }
-
     public Entite getContenu(){
         return this.contenu;
     }
@@ -31,7 +25,31 @@ public class CaseTraversable extends Case {
     }
 
     @Override
-    public void affiche(Graphics g,  Grille grille, Case c){
-        contenu.affiche(g, grille,c);
+    public void affiche(Graphics g,  FenetreJeu fj, Case c){
+        g.drawImage(imDalle, c.x*Jeu.tailleCase, c.y*Jeu.tailleCase, fj);
+        contenu.affiche(g, fj,c);
+    }
+    @Override 
+    public boolean estVide(){
+        return this.contenu instanceof Void;
+    }
+
+    @Override
+    public void entre(Bille b) {
+        
+    }
+
+    @Override
+    public void sort(Bille b) {
+        
+    }
+
+    @Override
+    public void touche(Bille b) {
+        if (!(contenu instanceof Void) && (b.getVitesse().vitesseAbsolue() >= 3)) {
+            if (--contenu.resistance == 0) {
+                this.vide();
+            }
+        }
     }
 }

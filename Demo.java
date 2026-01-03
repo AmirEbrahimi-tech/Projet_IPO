@@ -1,9 +1,8 @@
 public class Demo {
     
     public static void main(String[] args) {
-        Jeu jeu = new Jeu("Maps/laby_test2.txt"); //On charge le fichier text
-        Grille grille = new Grille(jeu.terrain);
-        FenetreJeu fj = new FenetreJeu(grille);
+        Jeu jeu = new Jeu("Maps/laby_test2.txt");
+        FenetreJeu fj = new FenetreJeu(jeu);
         try {
             while (true) {
                 // System.out.println("dirH : " + grille.bille.getDirectionH() + " dirV : " + grille.bille.getDirectionV());

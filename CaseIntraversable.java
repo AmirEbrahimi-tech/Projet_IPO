@@ -13,8 +13,20 @@ public class CaseIntraversable extends Case {
     public boolean estVide() {return false;}
 
     @Override
-    public void affiche(Graphics g,  Grille grille, Case c){
+    public void affiche(Graphics g,  FenetreJeu fj, Case c){
         // System.out.print("On dessine le mur\n");
-        g.drawImage(imMur, c.x*grille.tailleCase , c.y*grille.tailleCase, grille);
+        g.drawImage(imMur, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
     }
+
+	@Override
+	public void entre(Bille b) {
+	}
+
+	@Override
+	public void sort(Bille b) {
+	}
+
+	@Override
+	public void touche(Bille b) {
+	}
 }

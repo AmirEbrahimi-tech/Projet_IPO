@@ -10,5 +10,5 @@ public class EntiteMobile extends Entite {
         this.direction = dir;
     }
 
-    public void affiche(Graphics g, Grille grille,Case c) {}
+    public void affiche(Graphics g, FenetreJeu fj,Case c) {}
 }
