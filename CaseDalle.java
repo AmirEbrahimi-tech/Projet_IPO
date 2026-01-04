@@ -1,4 +1,3 @@
-
 import java.awt.*;
 
 public class CaseDalle extends CaseTraversable {
@@ -10,6 +9,7 @@ public class CaseDalle extends CaseTraversable {
         super(x,y,e);
         facAcceleration = 0.003;
         facFrottement = 0.96;
+        //Chargement de l'image de la dalle
         imDalle = Toolkit.getDefaultToolkit().getImage("Media/Images/Fonds/fond_dalle.png");   
     }
 

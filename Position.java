@@ -1,4 +1,3 @@
-// la classe Position
 public class Position {
     /* Attributs */
     private double x, y;

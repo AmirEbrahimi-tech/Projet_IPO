@@ -23,15 +23,11 @@ public class CaseIntraversable extends Case {
     }
 
 	@Override
-	public void entre(Bille b, Graphics g, FenetreJeu fj) {
-	}
-
+	public void entre(Bille b, Graphics g, FenetreJeu fj) {}
 	@Override
-	public void sort(Bille b, Graphics g, FenetreJeu fj) {
-	}
-
+	public void sort(Bille b, Graphics g, FenetreJeu fj) {}
 	@Override
 	public void touche(Bille b, Graphics g, FenetreJeu fj) {
-        b.joueSon();
+        b.joueSon();    //Son de rebond 
 	}
 }

@@ -4,7 +4,7 @@ import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-// la classe Monstre
+
 public class Monstre extends EntiteMobile {
     /* Attributs */
     private Image imMonstreB;
@@ -31,7 +31,6 @@ public class Monstre extends EntiteMobile {
 
     /* Méthodes */
 
-    // la méthode affiche
     public void affiche(Graphics g, FenetreJeu fj, Case c) {
         switch(getDirection()) {
             case sud -> g.drawImage(imMonstreB, c.getX()*Jeu.tailleCase , c.getY()*Jeu.tailleCase, fj);       
@@ -46,7 +45,6 @@ public class Monstre extends EntiteMobile {
         sonMonstre.start();
     }
 
-    // la méthode action
     public void action(Case courante, Case cible) {
         if (!(courante instanceof CaseTraversable)) return;
         CaseTraversable src = (CaseTraversable) courante;

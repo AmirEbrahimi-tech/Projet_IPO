@@ -4,27 +4,24 @@ import java.util.Scanner;
 
 
 public class Terrain {
-
+    /* Attributs */
     private int hauteur, largeur;
     private Case[][] carte;
 
-    /* Initialisation d'un terrain Ã  partir de la description donnÃ©e par
+    /* Initialisation d'un terrain à  partir de la description donnée par
        un fichier texte. Format du fichier de description :
-       - hauteur et largeur sur la premiÃ¨re ligne
-       - puis dessin du terrain (un caractÃ¨re == une case) avec le codage
+       - hauteur et largeur respectivement sur la première et la deuxième ligne
+       - puis dessin du terrain (un caractère == une case) avec le codage
          suivant
          '#' pour un mur
-         ' ' (espace) pour une case libre
+         ' ' (espace) pour une case traversable de type Dalle
+         '_' pour une case traversable de type Herbe
+         'T' pour une case traversable de type Trou
          'S' pour une sortie
-         '@' pour une case libre contenant un obstacle
-         'O' pour une case libre contenant la bille
+         '@' pour une case traversable contenant un obstacle
+         'W'/'M'/'E'/'3' pour une case traversable contenant un monstre
+         'e' pour une case traversable contenant la bille (point d'apparition)
     */
-
-    /* Getters */
-    public int getHauteur(){return this.hauteur;}    
-    public int getLargeur(){return this.largeur;}
-
-    public Case[][] getCarte(){return this.carte;}
 
     /* Constructeurs */
     public Terrain(String file) {
@@ -41,20 +38,13 @@ public class Terrain {
                     Case cc;
                     Character ch = line.charAt(x);
                     switch (ch) {
-                        case '#': cc = new CaseIntraversable(x, y); break;
-                        case 'E': cc = new CaseEntree(x, y, new Void()); break;
-                        case ' ': cc = new CaseDalle(x, y, new Void()); break;
+                        case '#': cc = new CaseIntraversable(x, y); break;      
+                        case 'e': cc = new CaseEntree(x, y, new Void()); break; 
+                        case ' ': cc = new CaseDalle(x, y, new Void()); break;  
                         case '_': cc = new CaseHerbe(x, y, new Void()); break;
                         case 'S': cc = new Sortie(x, y,new Void()); break;
                         case '@': cc = new CaseDalle(x,y, new PilierPierre()); break;
-                        case '0': cc = new Teleporteur(x, y); 
-                                   if (temp==null){temp = (Teleporteur)cc;} 
-                                   else {
-                                    ((Teleporteur)cc).setSortie(temp);
-                                    temp.setSortie((Teleporteur)cc);
-                                    temp = null;
-                                   }break;
-                        case 'W':
+                        case 'W' : case 'M' : case 'E' : case '3' :
                             cc = new CaseDalle(x, y, new Monstre(5, Direction.ofChar(ch)));
                             break;
                         case 'T': cc = new Trou(x, y);break;
@@ -64,8 +54,12 @@ public class Terrain {
                 }
             }
             sc.close();
-            if(temp!=null) throw new Error("Le nombre de téléporteurs n'est pas pair !");
         }
         catch (IOException e) { e.printStackTrace(); }
     }
+    
+    /* Getters */
+    public int getHauteur(){return this.hauteur;}    
+    public int getLargeur(){return this.largeur;}
+    public Case[][] getCarte(){return this.carte;}
 }

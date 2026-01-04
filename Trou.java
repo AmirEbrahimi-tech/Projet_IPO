@@ -8,7 +8,6 @@ public class Trou extends CaseTraversable{
     /* Attributs */
     private Image imTrou;
     private Clip sonChute;
-    // private Image imChute;
     
 
     /* Constructeur */
@@ -31,16 +30,20 @@ public class Trou extends CaseTraversable{
     public void affiche(Graphics g,  FenetreJeu fj, Case c){
         g.drawImage(imTrou, c.getX()*Jeu.tailleCase , c.getY()*Jeu.tailleCase, fj);
     }
+
     @Override
     public void entre(Bille b, Graphics g, FenetreJeu fj){
-        fj.ecranDefaite("Vous êtes tombés dans le vide !");
+        fj.ecranDefaite("Vous êtes tombé dans le vide !");
         sonChute.setFramePosition(0);
         sonChute.start();
     }
+
     @Override
     public void sort(Bille b, Graphics g, FenetreJeu fj){}
+
     @Override
     public void touche(Bille b, Graphics g, FenetreJeu fj){}
+    
     @Override
     public double getFacAcceleration() {return 0.0;}
 

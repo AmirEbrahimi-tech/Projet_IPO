@@ -5,13 +5,12 @@ import java.util.Random;
 public class Jeu {
     /* Variable Static */
     protected final static int tailleCase = 32;
+    protected static Position impact;  
 
     // Attributs
     private Terrain terrain;
     private Bille bille;
-
-    protected static Position impact;
-
+    
     //Constructeur
     public Jeu(String f) {
         terrain = new Terrain(f);
@@ -19,7 +18,7 @@ public class Jeu {
         bille = new Bille(new Position(entree.getX()*tailleCase*3/2, entree.getY()*tailleCase*3/2), new Vitesse());
     }
 
-    /* Getter */
+    /* Getters */
     public Terrain getTerrain(){return this.terrain;}
     public Bille getBille(){return this.bille;}
 
@@ -42,12 +41,13 @@ public class Jeu {
     }
 
     public boolean rebonditSurBord(Graphics g, FenetreJeu fj) {
-        // position actuel de la bille(pour vérifier que la bille est bien placée sur la grille)
+        /* position actuelle de la bille (on vérifie que la bille est bien placée sur la grille) */
         int x = (int) bille.getPositionX() / tailleCase;
         int y = (int) bille.getPositionY() / tailleCase;
-        // le rayon de la bille
+
+        /* le rayon de la bille */ 
         int r = bille.getRayon();
-        // position suivant de la bille d'après sa vitesse(et bien sa direction)
+
         /* Nouvelles coordonnées de la bille */
         int nouvX = (int) (bille.getPositionX() + bille.getVitesseX()) / tailleCase;  
         int nouvY = (int) (bille.getPositionY() + bille.getVitesseY()) / tailleCase;
@@ -59,21 +59,19 @@ public class Jeu {
         Case courante = getCase(y, x);
         if (courante == null) throw new NullPointerException("bille n'est pas bien localisée sur la grille!");
 
-        // DEBUG
-        // System.out.println("[rebondit] pos(px):(" + bille.getPositionX() + "," + bille.getPositionY() + ") (lig,col):(" + y + "," + x + ") nouv(lig,col):(" + nouvY + "," + nouvX + ")");
-
         Case caseD = getCase(nouvY,xd);    // case à droite
         Case caseH = getCase(yh,nouvX);    // case en haut
         Case caseG = getCase(nouvY,xg);    // case à gauche
         Case caseB = getCase(yb,nouvX);    // case en bas
 
-        // 1er = droite, 2nd = dessous, 3eme = gauche, 4eme = dessus
         if (caseD != null && caseD != courante && ! caseD.estVide()) {
             bille.getVitesse().renverseH();
-            // push the ball just outside the blocking cell to avoid sticking
+            
+            // On pousse la bille en dehors de la Case Intraversable
             double eps = 1.0;
             double wallX = xd * tailleCase;
-            // set position to be clearly outside the wall (do not call deplacer here)
+            
+            // On repositionne la bille pour éviter les trajectoires incohérentes
             caseD.touche(bille,g ,fj);
             signale(wallX, bille.getPositionY());
             bille.getPosition().set(wallX - (bille.getRayon() + eps), bille.getPositionY());
@@ -113,18 +111,18 @@ public class Jeu {
 
     // la méthode rebonditSurCoin
     private boolean rebonditSurCoin(Graphics g, FenetreJeu fj) {
-        // position actuel de la bille(pour vérifier que la bille est bien placée sur la grille)
+        /* position actuel de la bille */
         int x = (int) bille.getPositionX() / tailleCase;
         int y = (int) bille.getPositionY() / tailleCase;
-        // le rayon de la bille
+        /* le rayon de la bille */
         int r = bille.getRayon();
-        // position suivant de la bille d'après sa vitesse(et bien sa direction)
+        /* position suivant de la bille d'après sa vitesse */
         int nouvX = (int) (bille.getPositionX() + bille.getVitesseX()) / tailleCase;  // emplacement de la bille après deplacement sur la grille
         int nouvY = (int) (bille.getPositionY() + bille.getVitesseY()) / tailleCase;
 
         Case courante = getCase(y, x);
 
-        // nouvelle position de la bille sur la fenêtre
+        /* nouvelle position de la bille sur la fenêtre */
         double cx = bille.getPositionX() + bille.getVitesseX();
         double cy = bille.getPositionY() + bille.getVitesseY();
 
@@ -132,10 +130,6 @@ public class Jeu {
         Case caseBD = getCase(nouvY + 1, nouvX + 1);    // case en bas à droite
         Case caseBG = getCase(nouvY + 1, nouvX - 1);    // case en bas à gauche
         Case caseHG = getCase(nouvY - 1, nouvX - 1);    // case en haut à gauche
-        
-        // DEBUG: print per-frame diagnostic to help trace collision detection
-        // System.out.println("[rebondit] pos(px):(" + bille.getPositionX() + "," + bille.getPositionY() + ") grille(x,y):(" + x + "," + y + ") nouv(grille):(" + nouvX + "," + nouvY + ") suivante(px):(" + cx + "," + cy + ")");
-        // System.out.println("[rebondit] voisins -> HD:" + (caseHD instanceof CaseIntraversable) + " BD:" + (caseBD instanceof CaseIntraversable) + " BG:" + (caseBG instanceof CaseIntraversable) + " HG:" + (caseHG instanceof CaseIntraversable));
 
         // 1er = 1h30, 2nd = 4h30, 3eme = 7h30, 4eme = 10h30 (Position Aiguille Heure)
         Double coinX_ = Double.MAX_VALUE;
@@ -154,7 +148,6 @@ public class Jeu {
             }
         }
         if (caseBD != null && caseBD != courante && ! caseBD.estVide()) {
-            // bille.deplacer();
             double coinX = (nouvX + 1) * tailleCase;
             double coinY = (nouvY + 1) * tailleCase;
             double distance = Math.sqrt(Math.pow(cx - coinX, 2) +  Math.pow(cy - coinY, 2));
@@ -166,7 +159,6 @@ public class Jeu {
             }
         }
         if (caseBG != null && caseBG != courante && ! caseBG.estVide()) {
-            // bille.deplacer();
             double coinX = (nouvX) * tailleCase;
             double coinY = (nouvY + 1) * tailleCase;
             double distance = Math.sqrt(Math.pow(cx - coinX, 2) +  Math.pow(cy - coinY, 2));
@@ -178,7 +170,6 @@ public class Jeu {
             }
         }
         if (caseHG != null && caseHG != courante && ! caseHG.estVide()) {
-            // bille.deplacer();
             double coinX = (nouvX) * tailleCase;
             double coinY = (nouvY) * tailleCase;
             double distance = Math.sqrt(Math.pow(cx - coinX, 2) +  Math.pow(cy - coinY, 2));
@@ -192,7 +183,6 @@ public class Jeu {
 
         if (r_c < r) {
             plusProche.touche(bille, g, fj);
-            // bille.afficheImpact(g, fj, plusProche);
             if(plusProche == caseHD){
                 signale(coinX_ + 1, coinY_);
             } else if (plusProche == caseBD) {
@@ -202,23 +192,14 @@ public class Jeu {
             } else if (plusProche == caseHG) {
                 signale(coinX_ , coinY_);
             }
-            double dc_x, dc_y;
-            if (r_c == 0) {
-                // fallback normal: opposite to velocity direction
-                double speed = bille.getVitesse().vitesseAbsolue();
-                if (speed == 0) {
-                    dc_x = 1.0; dc_y = 0.0;
-                } else {
-                    dc_x = -bille.getVitesseX() / speed; 
-                    dc_y = -bille.getVitesseY() / speed;
-                }
-            } else {
-                dc_x = (cx - coinX_) / r_c;
-                dc_y = (cy - coinY_) / r_c;
-            }
+            
+            double dc_x = (cx - coinX_) / r_c;
+            double dc_y = (cy - coinY_) / r_c;
+
             double v_coin = bille.getVitesseX() * dc_x + bille.getVitesseY() * dc_y;
             bille.getVitesse().setVitesse(bille.getVitesseX() - 2 * v_coin * dc_x, bille.getVitesseY() - 2 * v_coin * dc_y);
-            // push the ball outside the corner along the normal to avoid re-collision
+
+            // On pousse la bille en dehors de la Case Intraversable
             double eps = 0.1;
             bille.getPosition().set(coinX_ + dc_x * (bille.getRayon() + eps), coinY_ + dc_y * (bille.getRayon() + eps));
             bille.getVitesse().multiplier(0.70);
@@ -281,9 +262,9 @@ public class Jeu {
 
         Case target = terrain.getCarte()[newY][newX];
         
-        // réduire les mouvements des monstres
-        int moveThrottle = 50;
-        if (rnd.nextInt(moveThrottle) == 0) {
+        // réduire les mouvements des monstres en grandir la variable n
+        int n = 10;
+        if (rnd.nextInt(n) == 0) {
             ent.action(src, target);
         }
     }

@@ -14,23 +14,12 @@ public class Bille {
     private Clip sonRebond;
 
     /* Constructeurs */
-    public Bille() {
-        this.pos = new Position(0, 0);
-        this.vit = new Vitesse();
-        this.vies = 3;
-        imBille = Toolkit.getDefaultToolkit().getImage("Media/Images/Bille/Bille.gif");
-        try{
-        AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("Media/Sons/Rebond.wav"));
-        sonRebond = AudioSystem.getClip();
-        sonRebond.open(audioIn);
-        }catch(Exception e){System.err.print(e);}
-        
-    }
-
     public Bille(Position pos, Vitesse vit) {
         this.pos = pos; this.vit = vit;
         this.vies = 3;
+        //Chargement de l'image de la bille
         imBille = Toolkit.getDefaultToolkit().getImage("Media/Images/Bille/Bille.gif");
+        //Chargement du son du rebon
         try{
         AudioInputStream audioIn1 = AudioSystem.getAudioInputStream(new File("Media/Sons/Rebond.wav"));
         sonRebond = AudioSystem.getClip();
@@ -58,21 +47,15 @@ public class Bille {
         return getVitesseY() / vit.vitesseAbsolue();
     }
 
-    // On verifie si la bille est contenue dans les bornes X et Y
-    // public boolean estDedans(double borneX, double borneY) {
-    //     return ((0 < getPositionX() - rayon + getVitesseX() && getPositionX() + rayon + getVitesseX() < borneX) && (0 < getPositionY() - rayon + getVitesseY() && getPositionY() + rayon + getVitesseY() < borneY));
-    // }
-
     // On déplace la bille grâce à sa vitesse en tenant compte du frottement
     public void deplacer(Jeu jeu, Graphics g, FenetreJeu fj) {
         // System.out.println(pos.x + " , " + pos.y);
-        // if (estDedans(Jeu.largeur * Jeu.tailleCase, Jeu.hauteur * Jeu.tailleCase)) 
-        pos.set(getPositionX() + getVitesseX(),getPositionY() + getVitesseY()); // 400 est temporaire!!!!! il faut ajouter une variable static a la classe fenetreJeu qui contient la taille du fenetre et les utiliser ici
+        pos.set(getPositionX() + getVitesseX(),getPositionY() + getVitesseY());
         frottement(jeu);
         
         Case courante  = jeu.getCase((int) getPositionY() / FenetreJeu.tailleCase, (int) getPositionX() / FenetreJeu.tailleCase);
         Case cible  = jeu.getCase((int) (getPositionY() + getVitesseY()) / FenetreJeu.tailleCase, (int) (getPositionX() + getVitesseX()) / FenetreJeu.tailleCase);
-        if (courante != cible) {
+        if (courante != cible) {    //Si la bille change de case
             courante.sort(jeu.getBille(), g, fj);
             cible.entre(jeu.getBille(),g ,fj);
         }
@@ -98,14 +81,6 @@ public class Bille {
     public void decremente(){
         vies--;
     }
-
-    // public void chute(Graphics g, FenetreJeu fj) {
-    //     sonChute.setFramePosition(0);
-    //     sonChute.start();
-    //     // pos.set((int)getPositionX(),(int)getPositionY());
-    //     // g.drawImage(imChute, (int)getPositionX()+1, (int)getPositionY()+1, fj);
-    //     vies = 0;
-    // }
 
     public boolean estMort() {
         return vies <= 0;

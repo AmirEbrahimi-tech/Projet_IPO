@@ -9,6 +9,7 @@ public class CaseEntree extends CaseTraversable {
         super(x,y,e);
         facAcceleration = 0.003;
         facFrottement = 0.96;
+        //Chargement de l'image de l'entree
         imEntree = Toolkit.getDefaultToolkit().getImage("Media/Images/Cases/Entree.png");   
     }
 

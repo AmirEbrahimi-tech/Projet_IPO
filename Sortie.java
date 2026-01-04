@@ -41,6 +41,7 @@ public class Sortie extends CaseTraversable {
 
     @Override
     public void touche(Bille b, Graphics g,FenetreJeu fj){}
+    
     @Override
     public double getFacAcceleration() {return 0.0;}
 

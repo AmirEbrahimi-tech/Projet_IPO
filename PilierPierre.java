@@ -7,7 +7,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
-// la classe PilierPierre un sous-type d'obstacle avec 5 points de vie
+// la classe PilierPierre un sous-type d'obstacle avec 3 points de vie
 public class PilierPierre extends Obstacle {
     /* Attributs */
     private Image imPierre1;
@@ -35,7 +35,8 @@ public class PilierPierre extends Obstacle {
         } catch(Exception e){System.err.print(e);}
     }
 
-    /* Méthode */
+    /* Méthodes */
+
     public void joueFrappe(){
         imPilFrappe.setFramePosition(0);
         imPilFrappe.start();
@@ -46,7 +47,6 @@ public class PilierPierre extends Obstacle {
         imPilDetruit.start();
     }
 
-
     @Override
     public void interagit(){
         if(getResistance()==0){
@@ -55,6 +55,7 @@ public class PilierPierre extends Obstacle {
             joueFrappe();
         }
     }
+    
     @Override
     public void affiche(Graphics g, FenetreJeu fj, Case c) {
         switch(getResistance()) {
