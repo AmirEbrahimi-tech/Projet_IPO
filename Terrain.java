@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Terrain {
 
     private int hauteur, largeur;
-    protected Case[][] carte;
+    private Case[][] carte;
 
     /* Initialisation d'un terrain Ã  partir de la description donnÃ©e par
        un fichier texte. Format du fichier de description :
@@ -20,17 +20,13 @@ public class Terrain {
          'O' pour une case libre contenant la bille
     */
 
-    // la méthode getHauteur
-    public int getHauteur(){
-        return this.hauteur;
-    }    
+    /* Getters */
+    public int getHauteur(){return this.hauteur;}    
+    public int getLargeur(){return this.largeur;}
 
-    // la méthode getLargeur
-    public int getLargeur(){
-        return this.largeur;
-    }
+    public Case[][] getCarte(){return this.carte;}
 
-    // le constructeur
+    /* Constructeurs */
     public Terrain(String file) {
         try {
             Scanner sc = new Scanner(new FileInputStream(file));
@@ -56,6 +52,9 @@ public class Terrain {
                                     temp.setSortie((Teleporteur)cc);
                                     temp = null;
                                    }break;
+                        case 'M': case '3': case 'W': case 'E':
+                            cc = new CaseTraversable(x, y, new Monstre(5, Direction.ofChar(ch)));
+                            break;
                         case '0': cc = new Trou(x, y);break;
                         default:  cc = null; break;
                     }

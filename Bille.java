@@ -12,7 +12,7 @@ public class Bille {
     private Position pos;
     private Position positionPrec;
     private Vitesse vit;
-    protected final int rayon = 12;
+    private final int rayon = 12;
     private Image imBille;
     private Clip rebond;
 
@@ -22,6 +22,7 @@ public class Bille {
         this.positionPrec = null;
         this.vit = new Vitesse();
         this.vies = 3;
+        imBille = Toolkit.getDefaultToolkit().getImage("Media/Images/Bille/Bille.gif");
         try{
         AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("Media/Sons/Rebond.wav"));
         rebond = AudioSystem.getClip();
@@ -48,7 +49,10 @@ public class Bille {
     public double getVitesseX(){return this.vit.getX();}
     public double getVitesseY(){return this.vit.getY();}
     public Vitesse getVitesse(){return this.vit;}
+    public int getRayon(){return this.rayon;}
+    public int getVies(){return this.vies;}
 
+    /* Méthodes */
     // On retourne la direction de la bille
     public double getDirectionH() {
         return getVitesseX() / vit.vitesseAbsolue();
@@ -59,14 +63,15 @@ public class Bille {
     }
 
     // On verifie si la bille est contenue dans les bornes X et Y
-    public boolean estDedans(double borneX, double borneY) {
-        return ((0 < getPositionX() - rayon + getVitesseX() && getPositionX() + rayon + getVitesseX() < borneX) && (0 < getPositionY() - rayon + getVitesseY() && getPositionY() + rayon + getVitesseY() < borneY));
-    }
+    // public boolean estDedans(double borneX, double borneY) {
+    //     return ((0 < getPositionX() - rayon + getVitesseX() && getPositionX() + rayon + getVitesseX() < borneX) && (0 < getPositionY() - rayon + getVitesseY() && getPositionY() + rayon + getVitesseY() < borneY));
+    // }
 
     // On déplace la bille grâce à sa vitesse en tenant compte du frottement
     public void deplacer() {
         // System.out.println(pos.x + " , " + pos.y);
-        if (estDedans(Jeu.largeur * Jeu.tailleCase, Jeu.hauteur * Jeu.tailleCase)) pos.set(getPositionX() + getVitesseX(),getPositionY() + getVitesseY()); // 400 est temporaire!!!!! il faut ajouter une variable static a la classe fenetreJeu qui contient la taille du fenetre et les utiliser ici
+        // if (estDedans(Jeu.largeur * Jeu.tailleCase, Jeu.hauteur * Jeu.tailleCase)) 
+        pos.set(getPositionX() + getVitesseX(),getPositionY() + getVitesseY()); // 400 est temporaire!!!!! il faut ajouter une variable static a la classe fenetreJeu qui contient la taille du fenetre et les utiliser ici
         frottement();
     }
 
@@ -81,15 +86,20 @@ public class Bille {
         g.drawImage(imBille, (int)getPositionX() - rayon , (int)getPositionY() - rayon, fj);
     }
 
+    // public void afficheImpact(Graphics g, FenetreJeu fj,  Case c){
+    //     g.drawImage(imImpact,c.getX() * Jeu.tailleCase , c.getY()*Jeu.tailleCase , fj);
+    // }
+
     public void joueSon(){
         rebond.setFramePosition(0);
         rebond.start();
     }
 
-    public void meurt(FenetreJeu fj){
+    public void decremente(){
         vies--;
-        if(vies<0){
+    }
 
-        }
+    public boolean estMeurt() {
+        return vies <= 0;
     }
 }

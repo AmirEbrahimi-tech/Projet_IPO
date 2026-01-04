@@ -1,14 +1,12 @@
 import java.awt.*;
 import javax.swing.*;
-// la classe Obstacle
-public class Obstacle extends Entite {
-    // les attributs
 
-    // le constructeur par défaut
-    public Obstacle(int resistance) {
+public class Obstacle extends Entite {
+    /* Constructeur */
+    public Obstacle(int resistance){
         super(resistance);
     }
 
-    
+    /* Méthode */
     public void affiche(Graphics g, FenetreJeu fj, Case c) {}
 }

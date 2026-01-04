@@ -5,15 +5,14 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 // la classe PilierPierre un sous-type d'obstacle avec 5 points de vie
 public class PilierPierre extends Obstacle {
-    // les attributs
-    // à voir
+    /* Attributs */
     private Image imPierre1;
     private Image imPierre2;
     private Image imPierre3;
     private Image imPierre4;
     private Image imPierre5;
 
-    // le constructeur
+    /* Constructeur */
     public PilierPierre() {
         // Initialisation de sa résistance
         super(5);
@@ -26,14 +25,15 @@ public class PilierPierre extends Obstacle {
         
     }
 
+    /* Méthode */
     @Override
     public void affiche(Graphics g, FenetreJeu fj, Case c) {
-        switch(resistance) {
-            case 5 -> g.drawImage(imPierre5, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
-            case 4 -> g.drawImage(imPierre4, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
-            case 3 -> g.drawImage(imPierre3, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
-            case 2 -> g.drawImage(imPierre2, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
-            case 1 -> g.drawImage(imPierre1, c.x*Jeu.tailleCase , c.y*Jeu.tailleCase, fj);
+        switch(getResistance()) {
+            case 5 -> g.drawImage(imPierre5, c.getX()*Jeu.tailleCase , c.getY()*Jeu.tailleCase, fj);
+            case 4 -> g.drawImage(imPierre4, c.getX()*Jeu.tailleCase , c.getY()*Jeu.tailleCase, fj);
+            case 3 -> g.drawImage(imPierre3, c.getX()*Jeu.tailleCase , c.getY()*Jeu.tailleCase, fj);
+            case 2 -> g.drawImage(imPierre2, c.getX()*Jeu.tailleCase , c.getY()*Jeu.tailleCase, fj);
+            case 1 -> g.drawImage(imPierre1, c.getX()*Jeu.tailleCase , c.getY()*Jeu.tailleCase, fj);
         }
     }
 }

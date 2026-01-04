@@ -5,46 +5,52 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.sound.sampled.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Random;
 
-// la classe de la grille du jeu contenant la bille
 public class Jeu {
+    /* Variable Static */
+    protected final static int tailleCase = 32;
+
     // Attributs
-    protected Terrain terrain;
-    protected static int tailleCase = 32;
-    protected static int hauteur, largeur;
-    protected Bille bille;
+    private Terrain terrain;
+    private Bille bille;
+
+    protected static Position impact;
 
     //Constructeur
     public Jeu(String f) {
         terrain = new Terrain(f);
-        hauteur = terrain.getHauteur();
-        largeur = terrain.getLargeur();
-        bille = new Bille(new Position(largeur*tailleCase/2, hauteur*tailleCase/2), new Vitesse());
+        bille = new Bille(new Position(terrain.getLargeur()*tailleCase/2, terrain.getHauteur()*tailleCase/2), new Vitesse());
     }
 
-    /* ------------------------------ Méthodes ------------------------------------ */
+    /* Getter */
+    public Terrain getTerrain(){return this.terrain;}
+    public Bille getBille(){return this.bille;}
+
+    /* Méthodes */
     public Case getCase(int ligne, int colonne) {
         try {
-            return this.terrain.carte[ligne][colonne];
+            return this.terrain.getCarte()[ligne][colonne];
         } catch (Exception e) {
             return null;
         }
     }
 
-    public boolean rebonditSurBord() {
+    public boolean rebonditSurBord(Graphics g, FenetreJeu fj) {
         // position actuel de la bille(pour vérifier que la bille est bien placée sur la grille)
         int x = (int) bille.getPositionX() / tailleCase;
         int y = (int) bille.getPositionY() / tailleCase;
         // le rayon de la bille
-        int r = bille.rayon;
+        int r = bille.getRayon();
         // position suivant de la bille d'après sa vitesse(et bien sa direction)
         /* Nouvelles coordonnées de la bille */
-        int nouvX = (int) (bille.getPositionX() + bille.vit.x) / tailleCase;  
-        int nouvY = (int) (bille.getPositionY() + bille.vit.y) / tailleCase;
-        int xd = (int) (bille.getPositionX() + bille.vit.x + r) / tailleCase; // droite
-        int xg = (int) (bille.getPositionX() + bille.vit.x - r) / tailleCase; // gauche
-        int yh = (int) (bille.getPositionY() + bille.vit.y - r) / tailleCase; // haut
-        int yb = (int) (bille.getPositionY() + bille.vit.y + r) / tailleCase; // bas
+        int nouvX = (int) (bille.getPositionX() + bille.getVitesseX()) / tailleCase;  
+        int nouvY = (int) (bille.getPositionY() + bille.getVitesseY()) / tailleCase;
+        int xd = (int) (bille.getPositionX() + bille.getVitesseX() + r) / tailleCase; // droite
+        int xg = (int) (bille.getPositionX() + bille.getVitesseX() - r) / tailleCase; // gauche
+        int yh = (int) (bille.getPositionY() + bille.getVitesseY() - r) / tailleCase; // haut
+        int yb = (int) (bille.getPositionY() + bille.getVitesseY() + r) / tailleCase; // bas
 
         Case courante = getCase(y, x);
         if (courante == null) throw new NullPointerException("bille n'est pas bien localisée sur la grille!");
@@ -59,60 +65,64 @@ public class Jeu {
 
         // 1er = droite, 2nd = dessous, 3eme = gauche, 4eme = dessus
         if (caseD != null && caseD != courante && ! caseD.estVide()) {
-            bille.vit.renverseH();
+            bille.getVitesse().renverseH();
             // push the ball just outside the blocking cell to avoid sticking
             double eps = 1.0;
             double wallX = xd * tailleCase;
             // set position to be clearly outside the wall (do not call deplacer here)
             caseD.touche(bille);
-            bille.getPosition().set(wallX - (bille.rayon + eps), bille.getPositionY());
-            bille.vit.multiplier(0.70);
+            signale(wallX, bille.getPositionY());
+            bille.getPosition().set(wallX - (bille.getRayon() + eps), bille.getPositionY());
+            bille.getVitesse().multiplier(0.70);
             return true;
         } else if (caseB != null && caseB != courante && ! caseB.estVide()) {
-            bille.vit.renverseV();
+            bille.getVitesse().renverseV();
             double eps = 1.0;
             double wallY = yb * tailleCase;
             caseB.touche(bille);
-            bille.getPosition().set(bille.getPositionX(), wallY - (bille.rayon + eps));
-            bille.vit.multiplier(0.70);
+            signale(bille.getPositionX(), wallY);
+            bille.getPosition().set(bille.getPositionX(), wallY - (bille.getRayon() + eps));
+            bille.getVitesse().multiplier(0.70);
             return true;
         } else if (caseG != null && caseG != courante && ! caseG.estVide()) {
-            bille.vit.renverseH();
+            bille.getVitesse().renverseH();
             double eps = 1.0;
             double wallX = (xg + 1) * tailleCase;
             caseG.touche(bille);
-            bille.getPosition().set(wallX + (bille.rayon + eps), bille.getPositionY());
-            bille.vit.multiplier(0.70);
+            signale(wallX, bille.getPositionY());
+            bille.getPosition().set(wallX + (bille.getRayon() + eps), bille.getPositionY());
+            bille.getVitesse().multiplier(0.70);
             return true; 
         } else if (caseH != null && caseH != courante && ! caseH.estVide()) {
-            bille.vit.renverseV();
+            bille.getVitesse().renverseV();
             double eps = 1.0;
             double wallY = (yh + 1) * tailleCase;
             caseH.touche(bille);
-            bille.getPosition().set(bille.getPositionX(), wallY + (bille.rayon + eps));
-            bille.vit.multiplier(0.70);
+            signale(bille.getPositionX(), wallY);
+            bille.getPosition().set(bille.getPositionX(), wallY + (bille.getRayon() + eps));
+            bille.getVitesse().multiplier(0.70);
             return true; 
         } else {
-            return rebonditSurCoin();
+            return rebonditSurCoin(g, fj);
         }
     }
 
     // la méthode rebonditSurCoin
-    private boolean rebonditSurCoin() {
+    private boolean rebonditSurCoin(Graphics g, FenetreJeu fj) {
         // position actuel de la bille(pour vérifier que la bille est bien placée sur la grille)
         int x = (int) bille.getPositionX() / tailleCase;
         int y = (int) bille.getPositionY() / tailleCase;
         // le rayon de la bille
-        int r = bille.rayon;
+        int r = bille.getRayon();
         // position suivant de la bille d'après sa vitesse(et bien sa direction)
-        int nouvX = (int) (bille.getPositionX() + bille.vit.x) / tailleCase;  // emplacement de la bille après deplacement sur la grille
-        int nouvY = (int) (bille.getPositionY() + bille.vit.y) / tailleCase;
+        int nouvX = (int) (bille.getPositionX() + bille.getVitesseX()) / tailleCase;  // emplacement de la bille après deplacement sur la grille
+        int nouvY = (int) (bille.getPositionY() + bille.getVitesseY()) / tailleCase;
 
         Case courante = getCase(y, x);
 
         // nouvelle position de la bille sur la fenêtre
-        double cx = bille.getPositionX() + bille.vit.x;
-        double cy = bille.getPositionY() + bille.vit.y;
+        double cx = bille.getPositionX() + bille.getVitesseX();
+        double cy = bille.getPositionY() + bille.getVitesseY();
 
         Case caseHD = getCase(nouvY - 1, nouvX + 1);    // case en haut à droite
         Case caseBD = getCase(nouvY + 1, nouvX + 1);    // case en bas à droite
@@ -178,31 +188,96 @@ public class Jeu {
 
         if (r_c < r) {
             plusProche.touche(bille);
+            // bille.afficheImpact(g, fj, plusProche);
+            // if(plusProche == caseHD){
+            //     g.drawImage(imImpact, x * Jeu.tailleCase + 1, y * Jeu.tailleCase,fj);
+            // } else if (plusProche == caseBD) {
+            //     g.drawImage(imImpact, x * Jeu.tailleCase + 1, y * Jeu.tailleCase + 1,fj);
+            // } else if (plusProche == caseBG) {
+            //     g.drawImage(imImpact, x * Jeu.tailleCase, y * Jeu.tailleCase + 1,fj);
+            // } else if (plusProche == caseHG) {
+            //     g.drawImage(imImpact, x * Jeu.tailleCase, y * Jeu.tailleCase,fj);
+            // }
             double dc_x, dc_y;
             if (r_c == 0) {
                 // fallback normal: opposite to velocity direction
-                double speed = bille.vit.vitesseAbsolue();
+                double speed = bille.getVitesse().vitesseAbsolue();
                 if (speed == 0) {
                     dc_x = 1.0; dc_y = 0.0;
                 } else {
-                    dc_x = -bille.vit.x / speed; 
-                    dc_y = -bille.vit.y / speed;
+                    dc_x = -bille.getVitesseX() / speed; 
+                    dc_y = -bille.getVitesseY() / speed;
                 }
             } else {
                 dc_x = (cx - coinX_) / r_c;
                 dc_y = (cy - coinY_) / r_c;
             }
-            double v_coin = bille.vit.x * dc_x + bille.vit.y * dc_y;
-            bille.vit.setVitesse(bille.vit.x - 2 * v_coin * dc_x, bille.vit.y - 2 * v_coin * dc_y);
+            double v_coin = bille.getVitesseX() * dc_x + bille.getVitesseY() * dc_y;
+            bille.getVitesse().setVitesse(bille.getVitesseX() - 2 * v_coin * dc_x, bille.getVitesseY() - 2 * v_coin * dc_y);
             // push the ball outside the corner along the normal to avoid re-collision
             double eps = 0.1;
-            bille.getPosition().set(coinX_ + dc_x * (bille.rayon + eps), coinY_ + dc_y * (bille.rayon + eps));
-            bille.vit.multiplier(0.70);
+            bille.getPosition().set(coinX_ + dc_x * (bille.getRayon() + eps), coinY_ + dc_y * (bille.getRayon() + eps));
+            bille.getVitesse().multiplier(0.70);
             return true;
         } else {
             bille.deplacer();
             return false;
         }
     }
+
+    // la méthode signale
+    public void signale(double x, double y) {
+        impact = new Position(x, y);
+    }
+    
+    
+    // la méthode tour
+    public void tour() {
+        Random rnd = new Random();
+
+        ArrayList<CaseTraversable> mobiles = new ArrayList<>();
+        for (int i = 0; i < terrain.getCarte().length; i++) {
+            for (int j = 0; j < terrain.getCarte()[0].length; j++) {
+                Case c = terrain.getCarte()[i][j];
+                if (c instanceof CaseTraversable) {
+                    Entite e = ((CaseTraversable) c).getContenu();
+                    if (e instanceof EntiteMobile) {
+                        mobiles.add((CaseTraversable)c);
+                    }
+                }
+            }
+        }
+
+        if (mobiles.isEmpty()) return;
+
+        CaseTraversable src = mobiles.get(rnd.nextInt(mobiles.size()));
+        EntiteMobile ent = (EntiteMobile) src.getContenu();
+
+        int newY = src.getY();
+        int newX = src.getX();
+
+        switch (ent.getDirection()) {
+            case nord:
+                newY = newY - 1;
+                break;
+            case sud:
+                newY = newY + 1;
+                break;
+            case est:
+                newX = newX + 1;
+                break;
+            case ouest:
+                newX = newX - 1;
+                break;
+            default:
+                return;
+        }
+
+        if (newY < 0 || newY >= terrain.getCarte().length || newX < 0 || newX >= terrain.getCarte()[0].length) return;
+
+        Case target = terrain.getCarte()[newY][newX];
+        ent.action(src, target);
+    }
+
 }
     
