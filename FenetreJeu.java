@@ -7,7 +7,7 @@ import javax.swing.*;
 public class FenetreJeu extends JPanel implements MouseMotionListener{
     /* Attributs */
     private Jeu jeu;
-    private int tailleCase = 32;
+    protected static int tailleCase = 32;
     private int hauteur, largeur;
     private JFrame frame;
     private Robot robot;
@@ -43,7 +43,7 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        System.out.println(jeu.getBille().getVies());
+        // System.out.println("[paintComponent - vies]" + jeu.getBille().getVies());
         for(int y = 0;y<hauteur;y++){
             for(int x = 0;x<largeur;x++){
                 Case c = jeu.getCase(y,x);
@@ -54,24 +54,30 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
             }
         }
         
+        if(jeu.rebonditSurBord(g, this)){
+            jeu.getBille().joueSon();
+        }
+        jeu.getBille().affiche(g,this);
+        // Draw impact overlay
+        afficheImpact(g);
+    }
+
+    // Draws the impact image and manages the timer that clears it.
+    private void afficheImpact(Graphics g) {
         Position p = Jeu.impact;
         if (p != null) {
             g.drawImage(imImpact, (int)p.getX() - 16, (int)p.getY() - 16, this);
             if (impactClearTimer == null) {
-                impactClearTimer = new Timer(200, e -> {
+                impactClearTimer = new Timer(250, e -> {
                     Jeu.impact = null;
                     impactClearTimer.stop();
                     impactClearTimer = null;
-                    repaint();
+                    // repaint();
                 });
                 impactClearTimer.setRepeats(false);
                 impactClearTimer.start();
             }
         }
-        if(jeu.rebonditSurBord(g, this)){
-            jeu.getBille().joueSon();
-        }
-        jeu.getBille().affiche(g,this);
     }
 
     @Override

@@ -14,6 +14,8 @@ public class CaseIntraversable extends Case {
     //Une case intraversable n'est jamais vide
     public boolean estVide() {return false;}
 
+    public boolean contientBille() {return false;}
+
     @Override
     public void affiche(Graphics g,  FenetreJeu fj, Case c){
         // System.out.print("On dessine le mur\n");

@@ -23,17 +23,20 @@ public class CaseTraversable extends Case {
     }
     @Override 
     public boolean estVide(){
-        return this.contenu instanceof Void;
+        return (this.contenu instanceof Void);
     }
 
     @Override
+    public boolean contientBille() {return contientBille;}
+
+    @Override
     public void entre(Bille b) {
-        
+        contientBille = true;
     }
 
     @Override
     public void sort(Bille b) {
-        
+        contientBille = false;
     }
 
     @Override

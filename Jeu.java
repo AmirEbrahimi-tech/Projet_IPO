@@ -50,7 +50,7 @@ public class Jeu {
         if (courante == null) throw new NullPointerException("bille n'est pas bien localisée sur la grille!");
 
         // DEBUG
-        System.out.println("[rebondit] pos(px):(" + bille.getPositionX() + "," + bille.getPositionY() + ") (lig,col):(" + y + "," + x + ") nouv(lig,col):(" + nouvY + "," + nouvX + ")");
+        // System.out.println("[rebondit] pos(px):(" + bille.getPositionX() + "," + bille.getPositionY() + ") (lig,col):(" + y + "," + x + ") nouv(lig,col):(" + nouvY + "," + nouvX + ")");
 
         Case caseD = getCase(nouvY,xd);    // case à droite
         Case caseH = getCase(yh,nouvX);    // case en haut
@@ -124,8 +124,8 @@ public class Jeu {
         Case caseHG = getCase(nouvY - 1, nouvX - 1);    // case en haut à gauche
         
         // DEBUG: print per-frame diagnostic to help trace collision detection
-        System.out.println("[rebondit] pos(px):(" + bille.getPositionX() + "," + bille.getPositionY() + ") grille(x,y):(" + x + "," + y + ") nouv(grille):(" + nouvX + "," + nouvY + ") suivante(px):(" + cx + "," + cy + ")");
-        System.out.println("[rebondit] voisins -> HD:" + (caseHD instanceof CaseIntraversable) + " BD:" + (caseBD instanceof CaseIntraversable) + " BG:" + (caseBG instanceof CaseIntraversable) + " HG:" + (caseHG instanceof CaseIntraversable));
+        // System.out.println("[rebondit] pos(px):(" + bille.getPositionX() + "," + bille.getPositionY() + ") grille(x,y):(" + x + "," + y + ") nouv(grille):(" + nouvX + "," + nouvY + ") suivante(px):(" + cx + "," + cy + ")");
+        // System.out.println("[rebondit] voisins -> HD:" + (caseHD instanceof CaseIntraversable) + " BD:" + (caseBD instanceof CaseIntraversable) + " BG:" + (caseBG instanceof CaseIntraversable) + " HG:" + (caseHG instanceof CaseIntraversable));
 
         // 1er = 1h30, 2nd = 4h30, 3eme = 7h30, 4eme = 10h30 (Position Aiguille Heure)
         Double coinX_ = Double.MAX_VALUE;
@@ -214,7 +214,7 @@ public class Jeu {
             bille.getVitesse().multiplier(0.70);
             return true;
         } else {
-            bille.deplacer();
+            bille.deplacer(this);
             return false;
         }
     }
@@ -270,7 +270,12 @@ public class Jeu {
         if (newY < 0 || newY >= terrain.getCarte().length || newX < 0 || newX >= terrain.getCarte()[0].length) return;
 
         Case target = terrain.getCarte()[newY][newX];
-        ent.action(src, target);
+        
+        // réduire les mouvements des monstres
+        int moveThrottle = 50;
+        if (rnd.nextInt(moveThrottle) == 0) {
+            ent.action(src, target);
+        }
     }
 
 }

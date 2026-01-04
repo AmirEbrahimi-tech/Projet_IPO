@@ -1,8 +1,8 @@
 import java.awt.*;
-import javax.swing.*;
 public abstract class Case {
     /* Attributs */
     private final int x,y;
+    protected boolean contientBille = false;
     protected Image imImpact;
 
     /* Constructeur */
@@ -19,6 +19,7 @@ public abstract class Case {
     /* Méthodes Abstraites */
     public abstract void affiche(Graphics g, FenetreJeu fj, Case c);
     public abstract boolean estVide();
+    public abstract boolean contientBille();
     public abstract void entre(Bille b);
     public abstract void sort(Bille b);
     public abstract void touche(Bille b);

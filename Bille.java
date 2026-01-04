@@ -1,16 +1,13 @@
 import java.awt.*;
 import java.io.File;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.tools.Tool;
 
 public class Bille {
     /* Attributs */
     private int vies;
     private Position pos;
-    private Position positionPrec;
     private Vitesse vit;
     private final int rayon = 12;
     private Image imBille;
@@ -19,7 +16,6 @@ public class Bille {
     /* Constructeurs */
     public Bille() {
         this.pos = new Position(0, 0);
-        this.positionPrec = null;
         this.vit = new Vitesse();
         this.vies = 3;
         imBille = Toolkit.getDefaultToolkit().getImage("Media/Images/Bille/Bille.gif");
@@ -32,7 +28,6 @@ public class Bille {
 
     public Bille(Position pos, Vitesse vit) {
         this.pos = pos; this.vit = vit;
-        this.positionPrec = null;
         this.vies = 3;
         imBille = Toolkit.getDefaultToolkit().getImage("Media/Images/Bille/Bille.gif");
         try{
@@ -68,11 +63,18 @@ public class Bille {
     // }
 
     // On déplace la bille grâce à sa vitesse en tenant compte du frottement
-    public void deplacer() {
+    public void deplacer(Jeu jeu) {
         // System.out.println(pos.x + " , " + pos.y);
         // if (estDedans(Jeu.largeur * Jeu.tailleCase, Jeu.hauteur * Jeu.tailleCase)) 
         pos.set(getPositionX() + getVitesseX(),getPositionY() + getVitesseY()); // 400 est temporaire!!!!! il faut ajouter une variable static a la classe fenetreJeu qui contient la taille du fenetre et les utiliser ici
         frottement();
+        
+        Case courante  = jeu.getCase((int) getPositionY() / FenetreJeu.tailleCase, (int) getPositionX() / FenetreJeu.tailleCase);
+        Case cible  = jeu.getCase((int) (getPositionY() + getVitesseY()) / FenetreJeu.tailleCase, (int) (getPositionX() + getVitesseX()) / FenetreJeu.tailleCase);
+        if (courante != cible) {
+            courante.sort(jeu.getBille());
+            cible.entre(jeu.getBille());
+        }
     }
 
     public void frottement() {
@@ -86,10 +88,6 @@ public class Bille {
         g.drawImage(imBille, (int)getPositionX() - rayon , (int)getPositionY() - rayon, fj);
     }
 
-    // public void afficheImpact(Graphics g, FenetreJeu fj,  Case c){
-    //     g.drawImage(imImpact,c.getX() * Jeu.tailleCase , c.getY()*Jeu.tailleCase , fj);
-    // }
-
     public void joueSon(){
         rebond.setFramePosition(0);
         rebond.start();
@@ -97,6 +95,10 @@ public class Bille {
 
     public void decremente(){
         vies--;
+    }
+
+    public void chute() {
+        vies = 0;
     }
 
     public boolean estMeurt() {

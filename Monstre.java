@@ -1,8 +1,4 @@
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.swing.*;
 // la classe Monstre
 public class Monstre extends EntiteMobile {
     /* Attributs */
@@ -38,7 +34,10 @@ public class Monstre extends EntiteMobile {
         if (!(courante instanceof CaseTraversable)) return;
         CaseTraversable src = (CaseTraversable) courante;
 
-        if (!(cible instanceof CaseTraversable)) return;
+        if (! cible.estVide() || cible.contientBille()) { 
+            this.setDirection(Direction.random()); 
+            return; 
+        }
         CaseTraversable dst = (CaseTraversable) cible;
 
         Entite tmp = dst.getContenu();
