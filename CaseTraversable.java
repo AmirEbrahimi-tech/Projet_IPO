@@ -30,20 +30,21 @@ public class CaseTraversable extends Case {
     public boolean contientBille() {return contientBille;}
 
     @Override
-    public void entre(Bille b) {
+    public void entre(Bille b, Graphics g, FenetreJeu fj) {
         contientBille = true;
     }
 
     @Override
-    public void sort(Bille b) {
+    public void sort(Bille b, Graphics g, FenetreJeu fj) {
         contientBille = false;
     }
 
     @Override
-    public void touche(Bille b) {
+    public void touche(Bille b, Graphics g, FenetreJeu fj) {
         if (contenu instanceof Void) {return;}
         else if (contenu instanceof Obstacle && (b.getVitesse().vitesseAbsolue() >= 3)) {
             contenu.decremente();
+            ((Obstacle)contenu).interagit();
             if (contenu.getResistance() == 0) this.vide();
         } else if (contenu instanceof Monstre) {
             b.decremente();

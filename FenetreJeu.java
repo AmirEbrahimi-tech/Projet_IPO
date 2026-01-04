@@ -54,9 +54,7 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
             }
         }
         
-        if(jeu.rebonditSurBord(g, this)){
-            jeu.getBille().joueSon();
-        }
+        jeu.rebonditSurBord(g, this);
         jeu.getBille().affiche(g,this);
         // Draw impact overlay
         afficheImpact(g);
@@ -93,9 +91,19 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
         robot.mouseMove(center.x, center.y);
     }
 
-    public void ecranFinal(long temps) {
+    public void ecranDefaite(long temps) {
         frame.remove(this);
-        JLabel label = new JLabel("Temps : " + temps/1000 + " secondes");
+        JLabel label = new JLabel("Game Over");
+        label.setFont(new Font("Verdana", 1, 20));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setSize(this.getSize());
+        frame.getContentPane().add(label);
+        frame.repaint();
+    }
+
+    public void ecranVictoire(long temps) {
+        frame.remove(this);
+        JLabel label = new JLabel("Félicitations ! Votre temps : " + temps/1000 + " secondes");
         label.setFont(new Font("Verdana", 1, 20));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setSize(this.getSize());

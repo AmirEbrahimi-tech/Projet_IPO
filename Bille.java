@@ -10,8 +10,10 @@ public class Bille {
     private Position pos;
     private Vitesse vit;
     private final int rayon = 12;
+    // private Image imChute;
     private Image imBille;
-    private Clip rebond;
+    private Clip sonRebond;
+    private Clip sonChute;
 
     /* Constructeurs */
     public Bille() {
@@ -19,10 +21,16 @@ public class Bille {
         this.vit = new Vitesse();
         this.vies = 3;
         imBille = Toolkit.getDefaultToolkit().getImage("Media/Images/Bille/Bille.gif");
+        // imChute = Toolkit.getDefaultToolkit().getImage("Media/Images/Bille/Chute.gif");
         try{
-        AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("Media/Sons/Rebond.wav"));
-        rebond = AudioSystem.getClip();
-        rebond.open(audioIn);
+        AudioInputStream audioIn1 = AudioSystem.getAudioInputStream(new File("Media/Sons/Rebond.wav"));
+        sonRebond = AudioSystem.getClip();
+        sonRebond.open(audioIn1);
+        }catch(Exception e){System.err.print(e);}
+        try{
+        AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(new File("Media/Sons/Chute.wav"));
+        sonChute = AudioSystem.getClip();
+        sonChute.open(audioIn2);
         }catch(Exception e){System.err.print(e);}
     }
 
@@ -31,10 +39,15 @@ public class Bille {
         this.vies = 3;
         imBille = Toolkit.getDefaultToolkit().getImage("Media/Images/Bille/Bille.gif");
         try{
-        AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("Media/Sons/Rebond.wav"));
-        rebond = AudioSystem.getClip();
-        rebond.open(audioIn);
-        } catch(Exception e){System.err.print(e);}
+        AudioInputStream audioIn1 = AudioSystem.getAudioInputStream(new File("Media/Sons/Rebond.wav"));
+        sonRebond = AudioSystem.getClip();
+        sonRebond.open(audioIn1);
+        }catch(Exception e){System.err.print(e);}
+        try{
+        AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(new File("Media/Sons/Chute.wav"));
+        sonChute = AudioSystem.getClip();
+        sonChute.open(audioIn2);
+        }catch(Exception e){System.err.print(e);}
     }
 
     /* Getters */
@@ -63,7 +76,7 @@ public class Bille {
     // }
 
     // On déplace la bille grâce à sa vitesse en tenant compte du frottement
-    public void deplacer(Jeu jeu) {
+    public void deplacer(Jeu jeu, Graphics g, FenetreJeu fj) {
         // System.out.println(pos.x + " , " + pos.y);
         // if (estDedans(Jeu.largeur * Jeu.tailleCase, Jeu.hauteur * Jeu.tailleCase)) 
         pos.set(getPositionX() + getVitesseX(),getPositionY() + getVitesseY()); // 400 est temporaire!!!!! il faut ajouter une variable static a la classe fenetreJeu qui contient la taille du fenetre et les utiliser ici
@@ -72,8 +85,8 @@ public class Bille {
         Case courante  = jeu.getCase((int) getPositionY() / FenetreJeu.tailleCase, (int) getPositionX() / FenetreJeu.tailleCase);
         Case cible  = jeu.getCase((int) (getPositionY() + getVitesseY()) / FenetreJeu.tailleCase, (int) (getPositionX() + getVitesseX()) / FenetreJeu.tailleCase);
         if (courante != cible) {
-            courante.sort(jeu.getBille());
-            cible.entre(jeu.getBille());
+            courante.sort(jeu.getBille(), g, fj);
+            cible.entre(jeu.getBille(),g ,fj);
         }
     }
 
@@ -89,15 +102,19 @@ public class Bille {
     }
 
     public void joueSon(){
-        rebond.setFramePosition(0);
-        rebond.start();
+        sonRebond.setFramePosition(0);
+        sonRebond.start();
     }
 
     public void decremente(){
         vies--;
     }
 
-    public void chute() {
+    public void chute(Graphics g, FenetreJeu fj) {
+        sonChute.setFramePosition(0);
+        sonChute.start();
+        pos.set((int)getPositionX(),(int)getPositionY());
+        g.drawImage(imBille, (int)getPositionX(), (int)getPositionY(), fj);
         vies = 0;
     }
 

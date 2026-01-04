@@ -3,7 +3,7 @@ public abstract class Case {
     /* Attributs */
     private final int x,y;
     protected boolean contientBille = false;
-    protected Image imImpact;
+    private Image imImpact;
 
     /* Constructeur */
     public Case(int x, int y){
@@ -20,7 +20,7 @@ public abstract class Case {
     public abstract void affiche(Graphics g, FenetreJeu fj, Case c);
     public abstract boolean estVide();
     public abstract boolean contientBille();
-    public abstract void entre(Bille b);
-    public abstract void sort(Bille b);
-    public abstract void touche(Bille b);
+    public abstract void entre(Bille b, Graphics g, FenetreJeu fj);
+    public abstract void sort(Bille b, Graphics g, FenetreJeu fj);
+    public abstract void touche(Bille b, Graphics g, FenetreJeu fj);
 }

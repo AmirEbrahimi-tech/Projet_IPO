@@ -1,7 +1,7 @@
 public class Demo {
     
     public static void main(String[] args) {
-        Jeu jeu = new Jeu("Maps/laby_test2.txt");
+        Jeu jeu = new Jeu("Maps/labyTrou.txt");
         FenetreJeu fj = new FenetreJeu(jeu);
         long debut = System.currentTimeMillis();
         try {
@@ -11,7 +11,7 @@ public class Demo {
                 jeu.tour();
                 if (jeu.getBille().estMeurt()) {
                     long fin = System.currentTimeMillis();
-                    fj.ecranFinal(fin - debut);
+                    fj.ecranDefaite(fin - debut);
                     Thread.sleep(10000);
                     break;
                 }

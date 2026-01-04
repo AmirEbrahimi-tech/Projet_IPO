@@ -64,7 +64,7 @@ public class Jeu {
             double eps = 1.0;
             double wallX = xd * tailleCase;
             // set position to be clearly outside the wall (do not call deplacer here)
-            caseD.touche(bille);
+            caseD.touche(bille,g ,fj);
             signale(wallX, bille.getPositionY());
             bille.getPosition().set(wallX - (bille.getRayon() + eps), bille.getPositionY());
             bille.getVitesse().multiplier(0.70);
@@ -73,7 +73,7 @@ public class Jeu {
             bille.getVitesse().renverseV();
             double eps = 1.0;
             double wallY = yb * tailleCase;
-            caseB.touche(bille);
+            caseB.touche(bille, g, fj);
             signale(bille.getPositionX(), wallY);
             bille.getPosition().set(bille.getPositionX(), wallY - (bille.getRayon() + eps));
             bille.getVitesse().multiplier(0.70);
@@ -82,7 +82,7 @@ public class Jeu {
             bille.getVitesse().renverseH();
             double eps = 1.0;
             double wallX = (xg + 1) * tailleCase;
-            caseG.touche(bille);
+            caseG.touche(bille, g, fj);
             signale(wallX, bille.getPositionY());
             bille.getPosition().set(wallX + (bille.getRayon() + eps), bille.getPositionY());
             bille.getVitesse().multiplier(0.70);
@@ -91,7 +91,7 @@ public class Jeu {
             bille.getVitesse().renverseV();
             double eps = 1.0;
             double wallY = (yh + 1) * tailleCase;
-            caseH.touche(bille);
+            caseH.touche(bille,g ,fj);
             signale(bille.getPositionX(), wallY);
             bille.getPosition().set(bille.getPositionX(), wallY + (bille.getRayon() + eps));
             bille.getVitesse().multiplier(0.70);
@@ -181,16 +181,16 @@ public class Jeu {
         }
 
         if (r_c < r) {
-            plusProche.touche(bille);
+            plusProche.touche(bille, g, fj);
             // bille.afficheImpact(g, fj, plusProche);
             if(plusProche == caseHD){
-                signale(x * Jeu.tailleCase + 1, y * Jeu.tailleCase);
+                signale(coinX_ + 1, coinY_);
             } else if (plusProche == caseBD) {
-                signale(x * Jeu.tailleCase + 1, y * Jeu.tailleCase + 1);
+                signale(coinX_ + 1, coinY_ + 1);
             } else if (plusProche == caseBG) {
-                signale(x * Jeu.tailleCase, y * Jeu.tailleCase + 1);
+                signale(coinX_ , coinY_ + 1);
             } else if (plusProche == caseHG) {
-                signale(x * Jeu.tailleCase, y * Jeu.tailleCase);
+                signale(coinX_ , coinY_);
             }
             double dc_x, dc_y;
             if (r_c == 0) {
@@ -214,7 +214,7 @@ public class Jeu {
             bille.getVitesse().multiplier(0.70);
             return true;
         } else {
-            bille.deplacer(this);
+            bille.deplacer(this, g, fj);
             return false;
         }
     }
