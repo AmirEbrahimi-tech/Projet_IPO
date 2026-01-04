@@ -1,7 +1,7 @@
 public class Demo {
-    
+    public static long temps;
     public static void main(String[] args) {
-        Jeu jeu = new Jeu("Maps/labyTrou.txt");
+        Jeu jeu = new Jeu("Maps/laby_test2.txt");
         FenetreJeu fj = new FenetreJeu(jeu);
         long debut = System.currentTimeMillis();
         try {
@@ -9,9 +9,9 @@ public class Demo {
                 // System.out.println("dirH : " + grille.bille.getDirectionH() + " dirV : " + grille.bille.getDirectionV());
                 fj.repaint();
                 jeu.tour();
-                if (jeu.getBille().estMeurt()) {
-                    long fin = System.currentTimeMillis();
-                    fj.ecranDefaite(fin - debut);
+                long fin = System.currentTimeMillis();
+                temps = fin-debut;
+                if (jeu.getBille().estMort()) {
                     Thread.sleep(10000);
                     break;
                 }

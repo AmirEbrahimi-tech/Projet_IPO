@@ -1,4 +1,9 @@
 import java.awt.*;
+import java.io.File;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 // la classe Monstre
 public class Monstre extends EntiteMobile {
     /* Attributs */
@@ -6,6 +11,7 @@ public class Monstre extends EntiteMobile {
     private Image imMonstreH;
     private Image imMonstreD;
     private Image imMonstreG;
+    private Clip sonMonstre;
     
     /* Constructeur */
     public Monstre(int resistance, Direction dir) {
@@ -15,6 +21,12 @@ public class Monstre extends EntiteMobile {
         imMonstreH = Toolkit.getDefaultToolkit().getImage("Media/Images/Monstre/Monstre_1.png");
         imMonstreD = Toolkit.getDefaultToolkit().getImage("Media/Images/Monstre/Monstre_2.png");
         imMonstreG = Toolkit.getDefaultToolkit().getImage("Media/Images/Monstre/Monstre_3.png");
+
+        try{
+        AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("Media/Sons/Monstre.wav"));
+        sonMonstre = AudioSystem.getClip();
+        sonMonstre.open(audioIn);
+        }catch(Exception error){System.err.print(error);}
     }
 
     /* Méthodes */
@@ -29,12 +41,17 @@ public class Monstre extends EntiteMobile {
         }
     }
 
+    public void joueSon(){
+        sonMonstre.setFramePosition(0);
+        sonMonstre.start();
+    }
+
     // la méthode action
     public void action(Case courante, Case cible) {
         if (!(courante instanceof CaseTraversable)) return;
         CaseTraversable src = (CaseTraversable) courante;
 
-        if (! cible.estVide() || cible.contientBille()) { 
+        if (cible instanceof CaseIntraversable || !cible.estVide() || ((CaseTraversable)cible).contientBille()||cible instanceof Sortie||cible instanceof Trou) { 
             this.setDirection(Direction.random()); 
             return; 
         }

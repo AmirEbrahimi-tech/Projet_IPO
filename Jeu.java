@@ -15,7 +15,8 @@ public class Jeu {
     //Constructeur
     public Jeu(String f) {
         terrain = new Terrain(f);
-        bille = new Bille(new Position(terrain.getLargeur()*tailleCase/2, terrain.getHauteur()*tailleCase/2), new Vitesse());
+        Position entree = getEntree();
+        bille = new Bille(new Position(entree.getX()*tailleCase*3/2, entree.getY()*tailleCase*3/2), new Vitesse());
     }
 
     /* Getter */
@@ -29,6 +30,15 @@ public class Jeu {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private Position getEntree() {
+        for (Case[] ligne : terrain.getCarte()) {
+            for (Case c : ligne) {
+                if (c instanceof CaseEntree) return new Position(c.getX(), c.getY());
+            }
+        }
+        return null;
     }
 
     public boolean rebonditSurBord(Graphics g, FenetreJeu fj) {

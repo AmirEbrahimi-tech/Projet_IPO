@@ -12,7 +12,7 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
     private JFrame frame;
     private Robot robot;
     private Image imImpact;
-    private Timer impactClearTimer;
+    private Timer ClearTimer;
 
     /* Constructeur */
     public FenetreJeu(Jeu j) {
@@ -58,6 +58,8 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
         jeu.getBille().affiche(g,this);
         // Draw impact overlay
         afficheImpact(g);
+        // afficheChute(g);
+        afficheVies(g);
     }
 
     // Draws the impact image and manages the timer that clears it.
@@ -65,18 +67,38 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
         Position p = Jeu.impact;
         if (p != null) {
             g.drawImage(imImpact, (int)p.getX() - 16, (int)p.getY() - 16, this);
-            if (impactClearTimer == null) {
-                impactClearTimer = new Timer(250, e -> {
+            if (ClearTimer == null) {
+                ClearTimer = new Timer(250, e -> {
                     Jeu.impact = null;
-                    impactClearTimer.stop();
-                    impactClearTimer = null;
+                    ClearTimer.stop();
+                    ClearTimer = null;
                     // repaint();
                 });
-                impactClearTimer.setRepeats(false);
-                impactClearTimer.start();
+                ClearTimer.setRepeats(false);
+                ClearTimer.start();
             }
         }
     }
+
+    // Draws the impact image and manages the timer that clears it.
+    // private void afficheChute(Graphics g) {
+    //     Position p = jeu.getBille().getPosition();
+    //     int x = (int) p.getX()/tailleCase;
+    //     int y = (int) p.getY()/tailleCase;
+    //     if (jeu.getCase(x, y) instanceof Trou) {
+    //         jeu.getBille().chute(g, this);
+    //         // g.drawImage(jeu.getBille().imChute, (int)p.getX()+1, (int)p.getY()+1, this);
+    //         if (ClearTimer == null) {
+    //             ClearTimer = new Timer(200, e -> {
+    //                 ClearTimer.stop();
+    //                 ClearTimer = null;
+    //                 // repaint();
+    //             });
+    //             ClearTimer.setRepeats(false);
+    //             ClearTimer.start();
+    //         }
+    //     }
+    // }
 
     @Override
     public void mouseDragged(MouseEvent e) {}
@@ -87,14 +109,31 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
         Point center = new Point(location.x + getWidth()/2,location.y + getHeight()/2);
         int dx = e.getXOnScreen() - center.x;
         int dy = e.getYOnScreen() - center.y;
-        jeu.getBille().getVitesse().setVitesse(jeu.getBille().getVitesseX() + dx*0.005, jeu.getBille().getVitesseY() + dy*0.005);
+        Position p = jeu.getBille().getPosition();
+        CaseTraversable courante  = (CaseTraversable) jeu.getCase((int) p.getY() / FenetreJeu.tailleCase, (int) p.getX() / FenetreJeu.tailleCase);
+        double f = courante.getFacAcceleration();
+        jeu.getBille().getVitesse().setVitesse(jeu.getBille().getVitesseX() + dx * f, jeu.getBille().getVitesseY() + dy * f);
         robot.mouseMove(center.x, center.y);
     }
 
-    public void ecranDefaite(long temps) {
+    private void afficheVies(Graphics g) { 
+        int vies = jeu.getBille().getVies(); 
+        String txt = "Vies : " + vies; 
+        g.setFont(new Font("Monospaced", 1, 30)); 
+        g.setColor(Color.WHITE); 
+        // Mesure du texte 
+        FontMetrics fm = g.getFontMetrics(); 
+        int textWidth = fm.stringWidth(txt); 
+        int textHeight = fm.getHeight(); 
+        // Position bas-droite
+        int x = getWidth() - textWidth - 20; 
+        int y = getHeight() - 20; g.drawString(txt, x, y); 
+    }
+
+    public void ecranDefaite(String message) {
         frame.remove(this);
-        JLabel label = new JLabel("Game Over");
-        label.setFont(new Font("Verdana", 1, 20));
+        JLabel label = new JLabel("<html><div style='text-align:center;'>"+"Game Over<br><br>" + message + "</div></html>");
+        label.setFont(new Font("Monospaced", 1, 20));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setSize(this.getSize());
         frame.getContentPane().add(label);
@@ -103,8 +142,8 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
 
     public void ecranVictoire(long temps) {
         frame.remove(this);
-        JLabel label = new JLabel("Félicitations ! Votre temps : " + temps/1000 + " secondes");
-        label.setFont(new Font("Verdana", 1, 20));
+        JLabel label = new JLabel("<html><div style='text-align:center;'>"+"Félicitations !<br><br>Votre temps : " + temps/1000 + " secondes");
+        label.setFont(new Font("Monospaced", 1, 20));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setSize(this.getSize());
         frame.getContentPane().add(label);

@@ -42,20 +42,22 @@ public class Terrain {
                     Character ch = line.charAt(x);
                     switch (ch) {
                         case '#': cc = new CaseIntraversable(x, y); break;
-                        case ' ': cc = new CaseTraversable(x, y, new Void()); break;
+                        case 'E': cc = new CaseEntree(x, y, new Void()); break;
+                        case ' ': cc = new CaseDalle(x, y, new Void()); break;
+                        case '_': cc = new CaseHerbe(x, y, new Void()); break;
                         case 'S': cc = new Sortie(x, y,new Void()); break;
-                        case '@': cc = new CaseTraversable(x,y, new PilierPierre()); break;
-                        case 'T': cc = new Teleporteur(x, y); 
+                        case '@': cc = new CaseDalle(x,y, new PilierPierre()); break;
+                        case '0': cc = new Teleporteur(x, y); 
                                    if (temp==null){temp = (Teleporteur)cc;} 
                                    else {
                                     ((Teleporteur)cc).setSortie(temp);
                                     temp.setSortie((Teleporteur)cc);
                                     temp = null;
                                    }break;
-                        case 'M': case '3': case 'W': case 'E':
-                            cc = new CaseTraversable(x, y, new Monstre(5, Direction.ofChar(ch)));
+                        case 'W':
+                            cc = new CaseDalle(x, y, new Monstre(5, Direction.ofChar(ch)));
                             break;
-                        case '0': cc = new Trou(x, y);break;
+                        case 'T': cc = new Trou(x, y);break;
                         default:  cc = null; break;
                     }
                     carte[y][x] = cc;
