@@ -25,4 +25,9 @@ public class Teleporteur extends CaseTraversable{
         this.active = false;
     }
 
+    @Override
+    public double getFacAcceleration() {return 0.0;}
+
+    @Override
+    public double getFacFrottement() {return 0.0;}
 }

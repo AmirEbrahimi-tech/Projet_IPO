@@ -2,13 +2,11 @@ import java.awt.*;
 public class CaseTraversable extends Case {
     /* Attributs */
     private Entite contenu;
-    private Image imDalle;
 
     /* Constructeur */
     public CaseTraversable(int x, int y, Entite e) {
         super(x,y);
         this.contenu = e;
-        imDalle = Toolkit.getDefaultToolkit().getImage("Media/Images/Fonds/fond_dalle.png");
     }
 
     /* Méthodes */
@@ -18,8 +16,6 @@ public class CaseTraversable extends Case {
 
     @Override
     public void affiche(Graphics g,  FenetreJeu fj, Case c){
-        g.drawImage(imDalle, c.getX()*Jeu.tailleCase, c.getY()*Jeu.tailleCase, fj);
-        contenu.affiche(g, fj,c);
     }
     @Override 
     public boolean estVide(){

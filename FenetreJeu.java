@@ -89,7 +89,10 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
         Point center = new Point(location.x + getWidth()/2,location.y + getHeight()/2);
         int dx = e.getXOnScreen() - center.x;
         int dy = e.getYOnScreen() - center.y;
-        jeu.getBille().getVitesse().setVitesse(jeu.getBille().getVitesseX() + dx*0.005, jeu.getBille().getVitesseY() + dy*0.005);
+        Position p = jeu.getBille().getPosition();
+        CaseTraversable courante  = (CaseTraversable) jeu.getCase((int) p.getY() / FenetreJeu.tailleCase, (int) p.getX() / FenetreJeu.tailleCase);
+        double f = courante.getFacAcceleration();
+        jeu.getBille().getVitesse().setVitesse(jeu.getBille().getVitesseX() + dx * f, jeu.getBille().getVitesseY() + dy * f);
         robot.mouseMove(center.x, center.y);
     }
 

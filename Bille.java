@@ -67,7 +67,7 @@ public class Bille {
         // System.out.println(pos.x + " , " + pos.y);
         // if (estDedans(Jeu.largeur * Jeu.tailleCase, Jeu.hauteur * Jeu.tailleCase)) 
         pos.set(getPositionX() + getVitesseX(),getPositionY() + getVitesseY()); // 400 est temporaire!!!!! il faut ajouter une variable static a la classe fenetreJeu qui contient la taille du fenetre et les utiliser ici
-        frottement();
+        frottement(jeu);
         
         Case courante  = jeu.getCase((int) getPositionY() / FenetreJeu.tailleCase, (int) getPositionX() / FenetreJeu.tailleCase);
         Case cible  = jeu.getCase((int) (getPositionY() + getVitesseY()) / FenetreJeu.tailleCase, (int) (getPositionX() + getVitesseX()) / FenetreJeu.tailleCase);
@@ -77,9 +77,11 @@ public class Bille {
         }
     }
 
-    public void frottement() {
+    public void frottement(Jeu jeu) {
         if (vit.vitesseAbsolue() > 0) {
-            getVitesse().setVitesse(getVitesseX()*0.98, getVitesseY()*0.98);
+            CaseTraversable courante  = (CaseTraversable) jeu.getCase((int) getPositionY() / FenetreJeu.tailleCase, (int) getPositionX() / FenetreJeu.tailleCase);
+            double f = courante.getFacFrottement();
+            getVitesse().setVitesse(getVitesseX() * f, getVitesseY() * f);
             // 0.98 doit est remplacé par une variable qui est donnée en fonction de la case qu'on est dessus
         }
     }

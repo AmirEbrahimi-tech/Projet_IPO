@@ -25,4 +25,10 @@ public class Trou extends CaseTraversable{
     public void sort(Bille b){}
     @Override
     public void touche(Bille b){}
+
+    @Override
+    public double getFacAcceleration() {return 0.0;}
+
+    @Override
+    public double getFacFrottement() {return 0.0;}
 }

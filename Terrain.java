@@ -42,7 +42,8 @@ public class Terrain {
                     Character ch = line.charAt(x);
                     switch (ch) {
                         case '#': cc = new CaseIntraversable(x, y); break;
-                        case ' ': cc = new CaseTraversable(x, y, new Void()); break;
+                        case ' ': cc = new CaseDalle(x, y, new Void()); break;
+                        case '_': cc = new CaseHerbe(x, y, new Void()); break;
                         case 'S': cc = new Sortie(x, y,new Void()); break;
                         case '@': cc = new CaseTraversable(x,y, new PilierPierre()); break;
                         case 'T': cc = new Teleporteur(x, y); 
