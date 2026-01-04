@@ -2,8 +2,6 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.lang.instrument.ClassDefinition;
-
 import javax.swing.*;
 
 public class FenetreJeu extends JPanel implements MouseMotionListener{
@@ -14,6 +12,7 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
     private JFrame frame;
     private Robot robot;
     private Image imImpact;
+    private Timer impactClearTimer;
 
     /* Constructeur */
     public FenetreJeu(Jeu j) {
@@ -52,6 +51,21 @@ public class FenetreJeu extends JPanel implements MouseMotionListener{
                 if (c instanceof CaseIntraversable) ((CaseIntraversable)c).affiche(g,this,c);
                 else if (c instanceof Trou) ((Trou)c).affiche(g,this,c);
                 else if (c instanceof CaseTraversable) ((CaseTraversable)c).affiche(g,this,c);
+            }
+        }
+        
+        Position p = Jeu.impact;
+        if (p != null) {
+            g.drawImage(imImpact, (int)p.getX() - 16, (int)p.getY() - 16, this);
+            if (impactClearTimer == null) {
+                impactClearTimer = new Timer(200, e -> {
+                    Jeu.impact = null;
+                    impactClearTimer.stop();
+                    impactClearTimer = null;
+                    repaint();
+                });
+                impactClearTimer.setRepeats(false);
+                impactClearTimer.start();
             }
         }
         if(jeu.rebonditSurBord(g, this)){

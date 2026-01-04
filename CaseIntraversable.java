@@ -1,5 +1,4 @@
 import java.awt.*;
-import javax.tools.Tool;
 
 public class CaseIntraversable extends Case {
     /* Attribut */
@@ -18,12 +17,6 @@ public class CaseIntraversable extends Case {
     @Override
     public void affiche(Graphics g,  FenetreJeu fj, Case c){
         // System.out.print("On dessine le mur\n");
-        Position p = Jeu.impact;
-        if (Jeu.impact != null) {
-            g.drawImage(imImpact, (int)p.getX() - 16, (int)p.getY() - 16,fj);
-            // réinitialisation de la position de l'impact
-            Jeu.impact = null;
-        }
         g.drawImage(imMur, c.getX()*Jeu.tailleCase , c.getY()*Jeu.tailleCase, fj);
     }
 

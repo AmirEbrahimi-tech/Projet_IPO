@@ -1,10 +1,4 @@
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferedImage;
-import javax.swing.*;
-import javax.sound.sampled.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -189,15 +183,15 @@ public class Jeu {
         if (r_c < r) {
             plusProche.touche(bille);
             // bille.afficheImpact(g, fj, plusProche);
-            // if(plusProche == caseHD){
-            //     g.drawImage(imImpact, x * Jeu.tailleCase + 1, y * Jeu.tailleCase,fj);
-            // } else if (plusProche == caseBD) {
-            //     g.drawImage(imImpact, x * Jeu.tailleCase + 1, y * Jeu.tailleCase + 1,fj);
-            // } else if (plusProche == caseBG) {
-            //     g.drawImage(imImpact, x * Jeu.tailleCase, y * Jeu.tailleCase + 1,fj);
-            // } else if (plusProche == caseHG) {
-            //     g.drawImage(imImpact, x * Jeu.tailleCase, y * Jeu.tailleCase,fj);
-            // }
+            if(plusProche == caseHD){
+                signale(x * Jeu.tailleCase + 1, y * Jeu.tailleCase);
+            } else if (plusProche == caseBD) {
+                signale(x * Jeu.tailleCase + 1, y * Jeu.tailleCase + 1);
+            } else if (plusProche == caseBG) {
+                signale(x * Jeu.tailleCase, y * Jeu.tailleCase + 1);
+            } else if (plusProche == caseHG) {
+                signale(x * Jeu.tailleCase, y * Jeu.tailleCase);
+            }
             double dc_x, dc_y;
             if (r_c == 0) {
                 // fallback normal: opposite to velocity direction
