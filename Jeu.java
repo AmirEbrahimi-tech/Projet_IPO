@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Jeu {
-    /* Variable Static */
+    /* Variables Static */
     protected final static int tailleCase = 32;
     protected static Position impact;  
 
@@ -111,7 +111,7 @@ public class Jeu {
 
     // la méthode rebonditSurCoin
     private boolean rebonditSurCoin(Graphics g, FenetreJeu fj) {
-        /* position actuel de la bille */
+        /* position actuelle de la bille */
         int x = (int) bille.getPositionX() / tailleCase;
         int y = (int) bille.getPositionY() / tailleCase;
         /* le rayon de la bille */
@@ -210,13 +210,10 @@ public class Jeu {
         }
     }
 
-    // la méthode signale
     public void signale(double x, double y) {
         impact = new Position(x, y);
     }
     
-    
-    // la méthode tour
     public void tour() {
         Random rnd = new Random();
 
@@ -262,7 +259,7 @@ public class Jeu {
 
         Case target = terrain.getCarte()[newY][newX];
         
-        // réduire les mouvements des monstres en grandir la variable n
+        // réduire les mouvements des monstres en augmentant la variable n
         int n = 10;
         if (rnd.nextInt(n) == 0) {
             ent.action(src, target);

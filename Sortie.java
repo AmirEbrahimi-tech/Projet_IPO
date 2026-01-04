@@ -15,7 +15,11 @@ public class Sortie extends CaseTraversable {
     /* Constructeur */
     public Sortie(int ligne, int colonne, Entite e) {
         super(ligne, colonne, e);
+
+        // Chargement de l'image de la sortie
         imSortie = Toolkit.getDefaultToolkit().getImage("Media/Images/Cases/Sortie.png");
+        
+        // Chargement des fichiers audio
         try{
         AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("Media/Sons/Sortie.wav"));
         sonSortie = AudioSystem.getClip();

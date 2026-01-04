@@ -1,4 +1,5 @@
 import java.awt.*;
+
 public abstract class Case {
     /* Attributs */
     private final int x,y;

@@ -1,6 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
-// la classe Entite
+
 public abstract class Entite {
     /* Attribut */ 
     private int resistance;

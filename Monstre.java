@@ -16,12 +16,14 @@ public class Monstre extends EntiteMobile {
     /* Constructeur */
     public Monstre(int resistance, Direction dir) {
         super(resistance, dir);
+
         // Chargement des images de texture
         imMonstreB = Toolkit.getDefaultToolkit().getImage("Media/Images/Monstre/Monstre_0.png");
         imMonstreH = Toolkit.getDefaultToolkit().getImage("Media/Images/Monstre/Monstre_1.png");
         imMonstreD = Toolkit.getDefaultToolkit().getImage("Media/Images/Monstre/Monstre_2.png");
         imMonstreG = Toolkit.getDefaultToolkit().getImage("Media/Images/Monstre/Monstre_3.png");
 
+        // Chargement des fichiers audio
         try{
         AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File("Media/Sons/Monstre.wav"));
         sonMonstre = AudioSystem.getClip();
@@ -30,7 +32,6 @@ public class Monstre extends EntiteMobile {
     }
 
     /* Méthodes */
-
     public void affiche(Graphics g, FenetreJeu fj, Case c) {
         switch(getDirection()) {
             case sud -> g.drawImage(imMonstreB, c.getX()*Jeu.tailleCase , c.getY()*Jeu.tailleCase, fj);       

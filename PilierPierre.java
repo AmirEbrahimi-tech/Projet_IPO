@@ -20,11 +20,13 @@ public class PilierPierre extends Obstacle {
     public PilierPierre() {
         // Initialisation de sa résistance
         super(3);
+        
         // Chargement des images de texture
         imPierre1 = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/pilier_pierre_1.png");
         imPierre2 = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/pilier_pierre_2.png");
         imPierre3 = Toolkit.getDefaultToolkit().getImage("Media/Images/Obstacles/pilier_pierre_3.png");
-        // Chargement des sons
+        
+        // Chargement des fichiers audio
         try{
         AudioInputStream audioIn1 = AudioSystem.getAudioInputStream(new File("Media/Sons/pillier_frappe.wav"));
         AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(new File("Media/Sons/pillier_detruit.wav"));
@@ -36,7 +38,6 @@ public class PilierPierre extends Obstacle {
     }
 
     /* Méthodes */
-
     public void joueFrappe(){
         imPilFrappe.setFramePosition(0);
         imPilFrappe.start();

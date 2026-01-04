@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+
 public abstract class EntiteMobile extends Entite {
     /* Attribut */
     private Direction direction;

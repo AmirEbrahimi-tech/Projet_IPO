@@ -1,4 +1,5 @@
 import java.awt.*;
+
 public class CaseTraversable extends Case {
     /* Attributs */
     private Entite contenu;

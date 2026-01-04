@@ -31,7 +31,6 @@ public class Terrain {
             this.largeur = sc.nextInt();
             sc.nextLine();
             this.carte = new Case[hauteur][largeur];
-            Teleporteur temp = null;
             for (int y=0; y<hauteur; y++) {
                 String line = sc.nextLine();
                 for (int x=0; x<largeur; x++) {

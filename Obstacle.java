@@ -7,7 +7,7 @@ public abstract class Obstacle extends Entite {
         super(resistance);
     }
 
-    /* Méthode */
+    /* Méthodes */
     public abstract void affiche(Graphics g, FenetreJeu fj, Case c);
     public abstract void interagit();
 }

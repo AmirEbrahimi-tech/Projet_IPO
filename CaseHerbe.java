@@ -1,10 +1,10 @@
-
 import java.awt.*;
 
 public class CaseHerbe extends CaseTraversable {
     /* Attributs */
     private Image imHerbe;
 
+    /* Constructeur */
     public CaseHerbe(int x, int y, Entite e) {
         super(x,y,e);
         facAcceleration = 0.001;
@@ -12,6 +12,7 @@ public class CaseHerbe extends CaseTraversable {
         imHerbe = Toolkit.getDefaultToolkit().getImage("Media/Images/Fonds/fond_herbe.png");   
     }
 
+    /* Méthodes */
     @Override
     public void affiche(Graphics g, FenetreJeu fj, Case c) {
         g.drawImage(imHerbe, c.getX()*Jeu.tailleCase, c.getY()*Jeu.tailleCase, fj);
